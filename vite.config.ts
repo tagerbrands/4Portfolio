@@ -6,6 +6,7 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
+    // Gebruik relatieve paden voor GitHub Pages (submap ondersteuning)
     base: './',
     plugins: [react(), tailwindcss()],
     define: {

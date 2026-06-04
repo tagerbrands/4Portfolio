@@ -94,7 +94,7 @@ export default function App() {
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 text-[var(--color-accent)] font-extrabold text-xl tracking-tight cursor-pointer" onClick={() => setStep(0)}>
             <Target className="w-6 h-6" />
-            <span>Ontwerp 4P leerroutes</span>
+            <span>4Portfolio</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-3 text-sm font-medium">
@@ -256,11 +256,10 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
     >
       <div className="text-center pt-2 pb-10 border-b border-black/10">
         <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-center leading-tight">
-          <span className="text-[var(--color-accent)]">4P</span><span className="text-black"> Leerroutes:</span><br/>
-          <span className="text-black">Een tool voor (her)ontwerp</span>
+          <span className="text-[var(--color-accent)]">4Portfolio</span>
         </h1>
         <p className="opacity-80 max-w-2xl mx-auto mb-10 text-lg">
-          (Her)ontwerp gefaciliteerde leerroutes o.b.v. het 4Ps Framework om betrouwbare beoordelingen en beslissingen te ondersteunen.
+          Portfolio-ontwerptool om leeruitkomsten aan te tonen
         </p>
         
         <button onClick={onNext} className="btn-primary text-xl px-10 py-4 shadow-xl">
@@ -689,7 +688,7 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-black/10 gap-4">
         <div className="text-left">
           <h2 className="text-sm font-bold text-[var(--color-accent)] uppercase tracking-wider mb-1">Leeruitkomst {loId}</h2>
-          <h3 className="text-2xl font-bold">Splits de LUK op in delen</h3>
+          <h3 className="text-2xl font-bold">Splits de LUK evt. op in delen</h3>
         </div>
         <div className="flex gap-4">
           <button 
@@ -1550,6 +1549,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
 
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold mb-2"><span className="text-[var(--color-accent)]">4P</span> Analyse</h2>
+        <p className="opacity-80 max-w-2xl mx-auto text-lg">Toont het portfolio de LUKs (in samenhang) overtuigend aan?</p>
       </div>
 
       <div className="glass-panel p-6 mb-12">
