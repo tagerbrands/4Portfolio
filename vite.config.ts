@@ -5,9 +5,13 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
+  
+  // Detecteer de repository naam voor de GitHub Action
+  const githubRepo = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './';
+  
   return {
     // Gebruik de repository naam als base path voor GitHub Pages indien we in een GitHub Action zitten, anders relatief.
-    base: process.env.VITE_BASE_PATH || './',
+    base: process.env.VITE_BASE_PATH || githubRepo,
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
