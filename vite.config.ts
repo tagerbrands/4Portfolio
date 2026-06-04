@@ -6,8 +6,8 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    // Gebruik relatieve paden voor GitHub Pages (submap ondersteuning)
-    base: './',
+    // Gebruik de repository naam als base path voor GitHub Pages indien we in een GitHub Action zitten, anders relatief.
+    base: process.env.VITE_BASE_PATH || './',
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
