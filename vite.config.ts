@@ -10,8 +10,8 @@ export default defineConfig(({mode}) => {
   const githubRepo = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './';
   
   return {
-    // Gebruik de repository naam als base path voor GitHub Pages indien we in een GitHub Action zitten, anders relatief.
-    base: process.env.VITE_BASE_PATH || githubRepo,
+    // Gebruik relatieve paden voor assets, zodat GitHub Pages dit zonder extra configuratie herkent.
+    base: './',
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

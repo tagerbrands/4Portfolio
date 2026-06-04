@@ -271,7 +271,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Het 4Ps Framework</h2>
           <p className="opacity-80 max-w-2xl mx-auto text-lg">
-            Voor een betrouwbare beoordeling van de kwaliteiten van studenten maak je idealiter gebruik van een mix van indirecte metingen: proxies.<br/>
+            Een beoordeling wordt idealiter ondersteund door een mix van indirecte metingen: proxies.<br/>
             <a href="https://www.tandfonline.com/doi/full/10.1080/02602938.2026.2620053#abstract" target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)] font-bold hover:underline">Fawns et al. (2026)</a> beschrijven er vier.
           </p>
         </div>
