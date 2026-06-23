@@ -427,6 +427,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
   const [editingLOId, setEditingLOId] = useState<string | null>(null);
   const [editLONumber, setEditLONumber] = useState('');
   const [editLOText, setEditLOText] = useState('');
+  const [showConfirmClear, setShowConfirmClear] = useState(false);
 
   const handleDeleteLO = (id: string) => {
     setLearningOutcomes(learningOutcomes.filter(lo => lo.id !== id));
@@ -611,12 +612,46 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
             </div>
           </div>
         ) : (
-          <button 
-            onClick={onTriggerAddLO}
-            className="w-full py-4 border-2 border-dashed border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors rounded-xl font-bold flex items-center justify-center gap-2"
-          >
-            <Plus className="w-5 h-5" /> {t("Voeg een Leeruitkomst toe")}
-          </button>
+          <div className="flex flex-col gap-4">
+            <button 
+              onClick={onTriggerAddLO}
+              className="w-full py-4 border-2 border-dashed border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors rounded-xl font-bold flex items-center justify-center gap-2"
+            >
+              <Plus className="w-5 h-5" /> {t("Voeg een Leeruitkomst toe")}
+            </button>
+            {learningOutcomes.length > 0 && (
+              showConfirmClear ? (
+                <div className="flex flex-col gap-2 p-4 border-2 border-red-300 rounded-xl bg-red-50 items-center justify-center">
+                  <p className="text-red-600 font-bold mb-2">{t("Let op: alle ingevoerde LUKs zullen worden verwijderd")}</p>
+                  <div className="flex gap-4">
+                    <button 
+                      onClick={() => setShowConfirmClear(false)}
+                      className="px-4 py-2 font-bold opacity-70 hover:opacity-100"
+                    >
+                      {t("Annuleren")}
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setLearningOutcomes([]);
+                        setPortfolio({});
+                        setShowConfirmClear(false);
+                      }}
+                      className="px-4 py-2 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600"
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setShowConfirmClear(true)}
+                  className="w-full py-4 border-2 border-dashed border-red-300 text-red-500 hover:bg-red-50 text-sm transition-colors rounded-xl font-bold flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" /> {t("Verwijder alle LUKs")}
+                </button>
+              )
+            )}
+          </div>
         )}
       </div>
     </motion.div>

@@ -58,6 +58,8 @@ const dict: Record<string, string> = {
   "Voer naam in": "Enter a name",
   "Terug naar theorie": "Back to Theory",
   "Voeg een Leeruitkomst toe": "Add a Learning Outcome",
+  "Let op: alle ingevoerde LUKs zullen worden verwijderd": "Warning: all Learning Outcomes will be removed",
+  "Verwijder alle LUKs": "Remove all Learning Outcomes",
   "Bewerk": "Edit",
   "Splits de LUK evt. op in delen": "Split the LOU into components",
   "Leeruitkomst": "Learning outcome",
