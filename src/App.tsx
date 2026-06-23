@@ -399,7 +399,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
 
         <div className="text-center text-sm opacity-60">
           <p>{t("Auteur:")} <a href="https://www.linkedin.com/in/tim-gerbrands" target="_blank" rel="noopener noreferrer" className="hover:underline text-[var(--color-accent)] font-bold">Tim A. Gerbrands</a></p>
-          <p>{t("Laatst bijgewerkt:")} 16 april 2026</p>
+          <p>{t("Laatst bijgewerkt:")} {t("23 juni 2026", "June 23, 2026")}</p>
         </div>
       </div>
     </motion.div>
@@ -599,25 +599,25 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-2 group">
-            <span className="text-3xl font-bold opacity-80">{t("Naam van EvL:", "Set of LOU:")}</span>
-            <div className="relative">
+      <div className="flex flex-col md:flex-row items-start md:items-start justify-between mb-8 gap-6 md:gap-4 w-full">
+        <div className="w-full md:w-auto flex-1 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2 group">
+            <span className="text-2xl sm:text-3xl font-bold opacity-80 whitespace-nowrap">{t("Naam van EvL:", "Set of LOU:")}</span>
+            <div className="relative w-full sm:w-auto flex-1 min-w-0">
               <input 
                 type="text" 
                 value={evlName} 
                 onChange={(e) => setEvlName(e.target.value)}
                 placeholder={t("Voer naam in")}
-                className="text-3xl font-bold bg-transparent border-b-2 border-dashed border-gray-300 hover:border-[var(--color-glass-border)] focus:border-[var(--color-accent)] outline-none transition-colors min-w-[400px] w-auto max-w-full text-[var(--color-accent)] pr-8 placeholder-gray-400"
+                className="text-2xl sm:text-3xl font-bold bg-transparent border-b-2 border-dashed border-gray-300 hover:border-[var(--color-glass-border)] focus:border-[var(--color-accent)] outline-none transition-colors w-full sm:min-w-[300px] max-w-full text-[var(--color-accent)] pr-8 placeholder-gray-400"
                 title="Pas de naam van de EvL aan"
               />
               <Pencil className="w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 opacity-30 group-hover:opacity-100 pointer-events-none transition-opacity text-[var(--color-accent)]" />
             </div>
           </div>
           <p className="opacity-80 mb-3">{t("Kies een leeruitkomst om te analyseren en bewijsstukken te koppelen.")}</p>
-          <div className="flex items-center gap-2">
-            <span className="text-sm opacity-60 font-bold">{t("Inladen:", "Load preset:")}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm opacity-60 font-bold hidden sm:inline-block">{t("Inladen:", "Load preset:")}</span>
             <input 
               type="file" 
               accept=".xlsx, .xls" 
@@ -627,7 +627,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
             />
             <button 
               onClick={() => fileInputRef.current?.click()}
-              className="text-sm bg-[var(--color-accent)] text-white hover:bg-opacity-90 px-3 py-1 rounded-full transition-colors flex items-center gap-1 font-bold shadow-sm"
+              className="text-sm bg-[var(--color-accent)] text-white hover:bg-opacity-90 px-3 py-1.5 sm:py-1 rounded-full transition-colors flex items-center gap-1 font-bold shadow-sm"
             >
               <FileUp className="w-4 h-4" /> {t("Voer eigen EvL in", "Upload custom set")}
             </button>
@@ -637,7 +637,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
                 setLearningOutcomes(NEW_EVL_OUTCOMES); 
                 setPortfolio(JSON.parse(JSON.stringify(NEW_EVL_DEFAULT_PORTFOLIO)));
               }}
-              className="text-sm bg-white/50 border border-black/10 hover:border-[var(--color-accent)] px-3 py-1 rounded-full transition-colors"
+              className="text-sm bg-white/50 border border-black/10 hover:border-[var(--color-accent)] px-3 py-1.5 sm:py-1 rounded-full transition-colors"
             >
               {t("EvL1, geen proxy-mix", "Set1, no proxy mix")}
             </button>
@@ -647,24 +647,24 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
                 setLearningOutcomes(EVL4_OUTCOMES); 
                 setPortfolio(JSON.parse(JSON.stringify(EVL4_DEFAULT_PORTFOLIO)));
               }}
-              className="text-sm bg-white/50 border border-black/10 hover:border-[var(--color-accent)] px-3 py-1 rounded-full transition-colors"
+              className="text-sm bg-white/50 border border-black/10 hover:border-[var(--color-accent)] px-3 py-1.5 sm:py-1 rounded-full transition-colors"
             >
               {t("EvL4, proxy-mix", "Set4, proxy mix")}
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col sm:flex-row md:flex-col gap-2 w-full md:w-auto shrink-0 mt-2 md:mt-0">
           <button 
             onClick={onViewTotal}
             disabled={totalEvidence === 0}
-            className={`btn-primary flex items-center justify-center gap-2 text-white ${totalEvidence === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full sm:w-auto md:w-full btn-primary flex items-center justify-center gap-2 text-white ${totalEvidence === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <LayoutDashboard className="w-5 h-5" /> <span>4P {t("Analyse", "Analysis")}</span>
           </button>
           <button 
             onClick={exportToExcel}
             disabled={learningOutcomes.length === 0}
-            className={`flex items-center justify-center px-6 py-3 font-bold rounded-[12px] transition-transform hover:scale-105 active:scale-95 shadow-sm gap-2 text-[var(--color-accent)] border-2 border-[var(--color-accent)] bg-black/5 hover:bg-black/10 ${learningOutcomes.length === 0 ? 'opacity-50 cursor-not-allowed transform-none' : ''}`}
+            className={`w-full sm:w-auto md:w-full flex items-center justify-center px-6 py-3 font-bold rounded-[12px] transition-transform hover:scale-105 active:scale-95 shadow-sm gap-2 text-[var(--color-accent)] border-2 border-[var(--color-accent)] bg-black/5 hover:bg-black/10 ${learningOutcomes.length === 0 ? 'opacity-50 cursor-not-allowed transform-none' : ''}`}
           >
             <FileDown className="w-5 h-5" /> <span>{t("Exporteer naar Excel", "Export to Excel")}</span>
           </button>
@@ -699,37 +699,48 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
           }
 
           return (
-            <div key={lo.id} className={`glass-panel p-6 flex flex-col md:flex-row gap-6 items-center transition-colors group ${evidenceCount > 0 ? 'bg-green-50/50 border-green-400/50 hover:border-green-500' : 'hover:border-[var(--color-accent)]'}`}>
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold shrink-0 ${evidenceCount > 0 ? 'bg-green-100 text-green-700' : 'glass-item text-[var(--color-accent)]'}`}>
-                {lo.id}
+            <div key={lo.id} className={`glass-panel p-6 flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center transition-colors group ${evidenceCount > 0 ? 'bg-green-50/50 border-green-400/50 hover:border-green-500' : 'hover:border-[var(--color-accent)]'}`}>
+              <div className="flex w-full md:w-auto items-center gap-4">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold shrink-0 ${evidenceCount > 0 ? 'bg-green-100 text-green-700' : 'glass-item text-[var(--color-accent)]'}`}>
+                  {lo.id}
+                </div>
+                <div className="flex-1 md:hidden">
+                  {hasStarted && (
+                    <div className={`flex flex-wrap gap-2 text-xs font-bold ${evidenceCount > 0 ? 'text-green-600' : 'text-[var(--color-accent)]'}`}>
+                      <span>{parts.length} {t("LUK-onderdelen")}</span>
+                      <span>•</span>
+                      <span>{evidenceCount} {t("bewijsstukken")}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex-1">
-                <p className={`font-medium line-clamp-2 opacity-90 ${evidenceCount > 0 ? 'text-green-900' : ''}`}>{t(lo.text)}</p>
+              <div className="flex-1 w-full">
+                <p className={`font-medium line-clamp-3 md:line-clamp-2 opacity-90 ${evidenceCount > 0 ? 'text-green-900' : ''}`}>{t(lo.text)}</p>
                 {hasStarted && (
-                  <div className={`flex flex-col sm:flex-row gap-2 sm:gap-4 mt-3 text-sm font-bold ${evidenceCount > 0 ? 'text-green-600' : 'text-[var(--color-accent)]'}`}>
+                  <div className={`hidden md:flex gap-4 mt-3 text-sm font-bold ${evidenceCount > 0 ? 'text-green-600' : 'text-[var(--color-accent)]'}`}>
                     <span>{parts.length} LUK-onderdelen</span>
-                    <span className="hidden sm:inline">•</span>
+                    <span>•</span>
                     <span>{evidenceCount} bewijsstuk{evidenceCount !== 1 && 'ken'}</span>
                   </div>
                 )}
               </div>
-              <div className="flex flex-col md:flex-row items-center gap-2 shrink-0 w-full md:w-auto justify-end">
+              <div className="flex flex-row items-center gap-2 shrink-0 w-full md:w-auto justify-end mt-2 md:mt-0">
                 <button
                   onClick={() => startEditLO(lo)}
-                  className={`p-3 rounded-xl transition-colors md:opacity-0 md:group-hover:opacity-100 ${evidenceCount > 0 ? 'text-green-700 hover:bg-green-100' : 'text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
+                  className={`flex-1 md:flex-none flex items-center justify-center p-3 rounded-xl transition-colors md:opacity-0 md:group-hover:opacity-100 ${evidenceCount > 0 ? 'text-green-700 bg-green-100 hover:bg-green-200 md:bg-transparent md:hover:bg-green-100' : 'text-[var(--color-accent)] bg-[var(--color-accent)]/10 hover:bg-[var(--color-accent)] hover:text-white md:bg-transparent'}`}
                   title="Pas nummer en tekst aan"
                 >
                   <Pencil className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={() => onStartLO(lo.id)}
-                  className={`px-6 py-3 rounded-xl border-2 font-bold transition-colors flex items-center gap-2 ${evidenceCount > 0 ? 'border-green-600 text-green-700 hover:bg-green-600 hover:text-white' : 'border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
+                  className={`flex-[2] md:flex-none px-6 py-3 rounded-xl border-2 font-bold transition-colors flex items-center justify-center gap-2 ${evidenceCount > 0 ? 'border-green-600 text-green-700 hover:bg-green-600 hover:text-white' : 'border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
                 >
-                  {hasStarted ? t('Bewerk') : 'Start'} <ChevronRight className="w-4 h-4" />
+                  {hasStarted ? t('Bewerk') : 'Start'} <ChevronRight className="w-4 h-4 hidden sm:inline" />
                 </button>
                 <button 
                   onClick={() => handleDeleteLO(lo.id)}
-                  className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors opacity-0 group-hover:opacity-100"
+                  className="flex-1 md:flex-none p-3 text-red-500 bg-red-50 hover:bg-red-100 rounded-xl transition-colors md:opacity-0 md:bg-transparent group-hover:opacity-100 flex items-center justify-center"
                   title="Verwijder leeruitkomst"
                 >
                   <Trash2 className="w-5 h-5" />

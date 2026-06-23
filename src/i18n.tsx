@@ -53,6 +53,7 @@ const dict: Record<string, string> = {
   "Het verzamelen van te veel proxies, wat leidt tot ruis, inefficiëntie en een onoverzichtelijk beeld voor de beoordelaars.": "Collecting too many proxies, resulting in noise, inefficiency, and an unclear picture for assessors.",
   "Auteur:": "Author:",
   "Laatst bijgewerkt:": "Last updated:",
+  "23 juni 2026": "June 23, 2026",
   "Naam van EvL:": "Name of Learning Outcome Set:",
   "Kies een leeruitkomst om te analyseren en bewijsstukken te koppelen.": "Select a learning outcome to analyze and link evidence to.",
   "Voer naam in": "Enter a name",
