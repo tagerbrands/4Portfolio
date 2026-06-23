@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Target, FileText, Award, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, RefreshCw, User, Plus, Trash2, Info, ChevronLeft, ChevronRight, LayoutDashboard, X, ExternalLink, PieChart, Users, CheckCircle2, ChevronDown, ChevronUp, RotateCcw, Triangle, Search, Pencil, Edit2, Layers, Globe } from 'lucide-react';
+import { BookOpen, Target, FileText, Award, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, RefreshCw, User, Plus, Trash2, Info, ChevronLeft, ChevronRight, LayoutDashboard, X, ExternalLink, PieChart, Users, CheckCircle2, ChevronDown, ChevronUp, RotateCcw, Triangle, Search, Pencil, Edit2, Layers, Globe, FileUp, FileDown } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import html2pdf from 'html2pdf.js';
+import * as XLSX from 'xlsx';
 import { useTranslation, Language } from './i18n';
 import { LEARNING_OUTCOMES, EVL_1_FYSIO, THE_4_PS, PType, TRIANGLE_THEORY, MISALIGNMENT_THEORY, AFSTUDEERONDERZOEK_DEFAULT_PORTFOLIO, NEW_EVL_OUTCOMES, NEW_EVL_DEFAULT_PORTFOLIO, EVL4_OUTCOMES, EVL4_DEFAULT_PORTFOLIO } from './data';
 
@@ -459,6 +460,133 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
     setEditingLOId(null);
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const exportToExcel = () => {
+    const rows: any[] = [];
+    
+    if (learningOutcomes.length === 0) {
+      alert(t("Geen data om te exporteren"));
+      return;
+    }
+
+    learningOutcomes.forEach((lo) => {
+      const parts = portfolio[lo.id] || [];
+      if (parts.length === 0) {
+         rows.push({
+           "LUK Nummer": lo.id,
+           "LUK Beschrijving": lo.text,
+           "Onderdeel ID": "",
+           "Onderdeel Beschrijving": "",
+           "Bewijs Naam": "",
+           "Bewijs Type": "",
+           "Stakeholders": ""
+         });
+      } else {
+        parts.forEach((part) => {
+          if (part.evidence.length === 0) {
+            rows.push({
+               "LUK Nummer": lo.id,
+               "LUK Beschrijving": lo.text,
+               "Onderdeel ID": part.id,
+               "Onderdeel Beschrijving": part.text,
+               "Bewijs Naam": "",
+               "Bewijs Type": "",
+               "Stakeholders": ""
+            });
+          } else {
+            part.evidence.forEach(ev => {
+              rows.push({
+                 "LUK Nummer": lo.id,
+                 "LUK Beschrijving": lo.text,
+                 "Onderdeel ID": part.id,
+                 "Onderdeel Beschrijving": part.text,
+                 "Bewijs Naam": ev.name,
+                 "Bewijs Type": ev.type,
+                 "Stakeholders": ev.stakeholders
+              });
+            });
+          }
+        });
+      }
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Portfolio");
+    XLSX.writeFile(wb, `Portfolio_${evlName || 'Export'}.xlsx`);
+  };
+
+  const handleImportExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const bstr = evt.target?.result;
+        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json<any>(ws);
+        
+        const newLOs: {id: string, text: string}[] = [];
+        const newPortfolio: Record<string, LOPart[]> = {};
+        
+        data.forEach(row => {
+          const loId = String(row["LUK Nummer"] || "").trim();
+          const loText = String(row["LUK Beschrijving"] || "").trim();
+          const partId = String(row["Onderdeel ID"] || "").trim();
+          const partText = String(row["Onderdeel Beschrijving"] || "").trim();
+          const evName = String(row["Bewijs Naam"] || "").trim();
+          const evType = String(row["Bewijs Type"] || "").trim() as PType;
+          const evStakeholders = String(row["Stakeholders"] || "").trim();
+          
+          if (!loId || loId === "undefined") return;
+
+          if (!newLOs.find(l => l.id === loId)) {
+            newLOs.push({ id: loId, text: loText });
+          }
+
+          if (partId && partId !== "undefined") {
+            if (!newPortfolio[loId]) {
+              newPortfolio[loId] = [];
+            }
+            
+            let part = newPortfolio[loId].find(p => p.id === partId);
+            if (!part) {
+              part = {
+                id: partId,
+                text: partText,
+                evidence: [],
+                colorClass: HIGHLIGHT_COLORS[newPortfolio[loId].length % HIGHLIGHT_COLORS.length]
+              };
+              newPortfolio[loId].push(part);
+            }
+            
+            if (evName && evType && evName !== "undefined" && String(evType) !== "undefined") {
+              part.evidence.push({
+                id: `ev_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                name: evName,
+                type: evType,
+                stakeholders: evStakeholders && evStakeholders !== "undefined" ? evStakeholders : ""
+              });
+            }
+          }
+        });
+        
+        setLearningOutcomes(newLOs);
+        setPortfolio(newPortfolio);
+        setEvlName(file.name.replace(/\.[^/.]+$/, ""));
+      } catch (err) {
+        console.error(err);
+        alert(t("Fout bij het inladen van het Excel bestand"));
+      }
+    };
+    reader.readAsBinaryString(file);
+    e.target.value = '';
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -490,6 +618,19 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
           <p className="opacity-80 mb-3">{t("Kies een leeruitkomst om te analyseren en bewijsstukken te koppelen.")}</p>
           <div className="flex items-center gap-2">
             <span className="text-sm opacity-60 font-bold">{t("Inladen:", "Load preset:")}</span>
+            <input 
+              type="file" 
+              accept=".xlsx, .xls" 
+              ref={fileInputRef} 
+              onChange={handleImportExcel} 
+              className="hidden" 
+            />
+            <button 
+              onClick={() => fileInputRef.current?.click()}
+              className="text-sm bg-[var(--color-accent)] text-white hover:bg-opacity-90 px-3 py-1 rounded-full transition-colors flex items-center gap-1 font-bold shadow-sm"
+            >
+              <FileUp className="w-4 h-4" /> {t("Voer eigen EvL in", "Upload custom set")}
+            </button>
             <button 
               onClick={() => { 
                 setEvlName(t("EvL1, geen proxy-mix", "Set1, no proxy mix")); 
@@ -512,13 +653,22 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
             </button>
           </div>
         </div>
-        <button 
-          onClick={onViewTotal}
-          disabled={totalEvidence === 0}
-          className={`btn-primary flex items-center gap-2 text-white ${totalEvidence === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          <LayoutDashboard className="w-5 h-5" /> <span>4P {t("Analyse", "Analysis")}</span>
-        </button>
+        <div className="flex flex-col gap-2">
+          <button 
+            onClick={onViewTotal}
+            disabled={totalEvidence === 0}
+            className={`btn-primary flex items-center justify-center gap-2 text-white ${totalEvidence === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            <LayoutDashboard className="w-5 h-5" /> <span>4P {t("Analyse", "Analysis")}</span>
+          </button>
+          <button 
+            onClick={exportToExcel}
+            disabled={learningOutcomes.length === 0}
+            className={`flex items-center justify-center px-6 py-3 font-bold rounded-[12px] transition-transform hover:scale-105 active:scale-95 shadow-sm gap-2 text-[var(--color-accent)] border-2 border-[var(--color-accent)] bg-black/5 hover:bg-black/10 ${learningOutcomes.length === 0 ? 'opacity-50 cursor-not-allowed transform-none' : ''}`}
+          >
+            <FileDown className="w-5 h-5" /> <span>{t("Exporteer naar Excel", "Export to Excel")}</span>
+          </button>
+        </div>
       </div>
 
       <div className="space-y-4">
