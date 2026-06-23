@@ -321,7 +321,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
                 <div className="flex flex-col gap-4">
                   <div className="bg-green-50/70 p-3 rounded-lg border border-green-200 flex-1 flex flex-col justify-center">
                     <p className="text-sm text-green-900 leading-relaxed">
-                      <strong>{t("Voordelen:")}</strong> {t(p.voordelen)}
+                      <strong>{t("Sterktes:")}</strong> {t(p.voordelen)}
                     </p>
                   </div>
                   <div className="bg-red-50/70 p-3 rounded-lg border border-red-200 flex-1 flex flex-col justify-center">
@@ -1375,11 +1375,11 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
                       <h3 className="text-lg font-bold">{pt.label}</h3>
                     </div>
                     <div className="space-y-3 text-sm">
-                      <p><strong>Beschrijving:</strong> {pt.beschrijving}</p>
-                      <p><strong>Focus:</strong> {pt.focus}</p>
-                      <p><strong>Voorbeelden:</strong> {pt.voorbeelden}</p>
-                      <p><strong>Voordelen:</strong> {pt.voordelen}</p>
-                      <p><strong>Beperkingen:</strong> {pt.beperkingen}</p>
+                      <p><strong>{t("Beschrijving:")}</strong> {t(pt.beschrijving)}</p>
+                      <p><strong>{t("Focus:")}</strong> {t(pt.focus)}</p>
+                      <p><strong>{t("Voorbeelden:")}</strong> {t(pt.voorbeelden)}</p>
+                      <p><strong>{t("Sterktes:")}</strong> {t(pt.voordelen)}</p>
+                      <p><strong>{t("Beperkingen:")}</strong> {t(pt.beperkingen)}</p>
                     </div>
                   </div>
                 );
@@ -1681,7 +1681,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               
               <div className="print-grid mb-4">
                 <div className="print-col">
-                  <strong>Gebruikte Proxies:</strong>
+                  <strong>{t("Gebruikte Proxies:")}</strong>
                   <div className="flex gap-2 mt-2">
                     {THE_4_PS.map(pt => usedProxyTypes.includes(pt.id) && (
                       <span key={pt.id} className="border px-2 py-1 text-xs rounded">{pt.label}</span>
@@ -1689,10 +1689,10 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                   </div>
                 </div>
                 <div className="print-col">
-                  <strong>Betrokken Stakeholders:</strong>
+                  <strong>{t("Betrokken Stakeholders:")}</strong>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {loStakeholders.map(sh => (
-                      <span key={sh} className="border px-2 py-1 text-xs rounded">{sh}</span>
+                      <span key={sh} className="border px-2 py-1 text-xs rounded">{t(sh)}</span>
                     ))}
                   </div>
                 </div>
@@ -1701,20 +1701,20 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               {usedProxyTypes.length > 0 && (
                 <div className="grid grid-cols-2 gap-4 mb-4 text-[10px] opacity-80 border-l-2 border-[var(--color-accent)] pl-3">
                   <div>
-                    <strong className="block mb-1 text-xs">Voordelen:</strong>
+                    <strong className="block mb-1 text-xs">{t("Sterktes:")}</strong>
                     <ul className="list-disc pl-3 space-y-1">
                       {usedProxyTypes.map(uid => {
                         const pt = THE_4_PS.find(p => p.id === uid);
-                        return pt ? <li key={pt.id}><b>{pt.label}:</b> {pt.voordelen}</li> : null;
+                        return pt ? <li key={pt.id}><b>{pt.label}:</b> {t(pt.voordelen)}</li> : null;
                       })}
                     </ul>
                   </div>
                   <div>
-                    <strong className="block mb-1 text-xs">Nadelen:</strong>
+                    <strong className="block mb-1 text-xs">{t("Beperkingen:")}</strong>
                     <ul className="list-disc pl-3 space-y-1">
                       {usedProxyTypes.map(uid => {
                         const pt = THE_4_PS.find(p => p.id === uid);
-                        return pt ? <li key={pt.id}><b>{pt.label}:</b> {pt.beperkingen}</li> : null;
+                        return pt ? <li key={pt.id}><b>{pt.label}:</b> {t(pt.beperkingen)}</li> : null;
                       })}
                     </ul>
                   </div>
@@ -1722,7 +1722,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               )}
 
               <div>
-                <strong>LUK Onderdelen & Bewijsstukken:</strong>
+                <strong>{t("LUK Onderdelen & Bewijsstukken:")}</strong>
                 <ul className="mt-2 text-xs space-y-2 list-disc pl-4">
                   {parts.map(part => {
                     const textColorClass = part.colorClass.replace(/bg-[a-z]+-[0-9]+/g, '').trim(); 
@@ -1925,40 +1925,40 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
 
                               <div className="grid md:grid-cols-2 gap-8 mt-6">
                                 <div>
-                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">Voordelen van ingezette proxies</h4>
+                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">{t("Sterktes van ingezette proxies")}</h4>
                                   <ul className="space-y-3">
                                     {usedProxyTypes.map(uid => {
                                       const pt = THE_4_PS.find(p => p.id === uid);
                                       if (!pt) return null;
                                       return (
                                         <li key={pt.id} className="text-sm">
-                                          <strong className={pt.colorClass.split(' ')[1]}>{pt.label}:</strong> <span className="opacity-80">{pt.voordelen}</span>
+                                          <strong className={pt.colorClass.split(' ')[1]}>{pt.label}:</strong> <span className="opacity-80">{t(pt.voordelen)}</span>
                                         </li>
                                       );
                                     })}
-                                    {usedProxyTypes.length === 0 && <li className="text-sm opacity-60 italic">Nog geen proxies ingezet.</li>}
+                                    {usedProxyTypes.length === 0 && <li className="text-sm opacity-60 italic">{t("Nog geen proxies ingezet.")}</li>}
                                   </ul>
                                 </div>
                                 <div>
-                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">Nadelen van ingezette proxies</h4>
+                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">{t("Beperkingen van ingezette proxies")}</h4>
                                   <ul className="space-y-3">
                                     {usedProxyTypes.map(uid => {
                                       const pt = THE_4_PS.find(p => p.id === uid);
                                       if (!pt) return null;
                                       return (
                                         <li key={pt.id} className="text-sm">
-                                          <strong className={pt.colorClass.split(' ')[1]}>{pt.label}:</strong> <span className="opacity-80">{pt.beperkingen}</span>
+                                          <strong className={pt.colorClass.split(' ')[1]}>{pt.label}:</strong> <span className="opacity-80">{t(pt.beperkingen)}</span>
                                         </li>
                                       );
                                     })}
-                                    {usedProxyTypes.length === 0 && <li className="text-sm opacity-60 italic">Nog geen proxies ingezet.</li>}
+                                    {usedProxyTypes.length === 0 && <li className="text-sm opacity-60 italic">{t("Nog geen proxies ingezet.")}</li>}
                                   </ul>
                                 </div>
                               </div>
 
                               <div className="mt-8 space-y-6">
                                 <div>
-                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">Bewijsmaterialen</h4>
+                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">{t("Bewijsmaterialen")}</h4>
                                   {loEvidence.length > 0 ? (
                                     <ul className="space-y-2 text-sm max-h-[300px] overflow-y-auto pr-2 grid grid-cols-1 md:grid-cols-2 gap-2">
                                       {loEvidence.map(e => {
@@ -1972,19 +1972,19 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                                       })}
                                     </ul>
                                   ) : (
-                                    <span className="text-sm opacity-60 italic">Geen bewijsmateriaal gekoppeld.</span>
+                                    <span className="text-sm opacity-60 italic">{t("Geen bewijsmateriaal gekoppeld.")}</span>
                                   )}
                                 </div>
 
                                 <div>
-                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">Betrokken stakeholders</h4>
+                                  <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">{t("Betrokken stakeholders")}</h4>
                                   <div className="flex flex-wrap gap-2">
                                     {loStakeholders.length > 0 ? (
                                       loStakeholders.map((sh, idx) => (
-                                        <span key={idx} className="bg-white border rounded-full px-3 py-1 text-sm shadow-sm font-medium">{sh}</span>
+                                        <span key={idx} className="bg-white border rounded-full px-3 py-1 text-sm shadow-sm font-medium">{t(sh)}</span>
                                       ))
                                     ) : (
-                                      <span className="text-sm opacity-60 italic">Geen stakeholders gekoppeld.</span>
+                                      <span className="text-sm opacity-60 italic">{t("Geen stakeholders gekoppeld.")}</span>
                                     )}
                                   </div>
                                 </div>
@@ -2112,11 +2112,11 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                       <h3 className="text-lg font-bold">{pt.label}</h3>
                     </div>
                     <div className="space-y-3 text-sm">
-                      <p><strong>Beschrijving:</strong> {pt.beschrijving}</p>
-                      <p><strong>Focus:</strong> {pt.focus}</p>
-                      <p><strong>Voorbeelden:</strong> {pt.voorbeelden}</p>
-                      <p><strong>Voordelen:</strong> {pt.voordelen}</p>
-                      <p><strong>Beperkingen:</strong> {pt.beperkingen}</p>
+                      <p><strong>{t("Beschrijving:")}</strong> {t(pt.beschrijving)}</p>
+                      <p><strong>{t("Focus:")}</strong> {t(pt.focus)}</p>
+                      <p><strong>{t("Voorbeelden:")}</strong> {t(pt.voorbeelden)}</p>
+                      <p><strong>{t("Sterktes:")}</strong> {t(pt.voordelen)}</p>
+                      <p><strong>{t("Beperkingen:")}</strong> {t(pt.beperkingen)}</p>
                     </div>
                   </div>
                 );
