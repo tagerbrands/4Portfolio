@@ -94,7 +94,7 @@ export default function App() {
   return (
     <div className="min-h-screen font-sans selection:bg-[var(--color-accent)] selection:text-white pb-20">
       <header className="glass-header sticky top-0 z-10 border-b border-black/5 bg-white/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 text-[var(--color-accent)] font-extrabold text-xl tracking-tight cursor-pointer" onClick={() => setStep(0)}>
             <Target className="w-6 h-6" />
             <span>{t("4Portfolio")}</span>
@@ -156,7 +156,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-12">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <AnimatePresence mode="wait">
           {step === 0 && <Theory key="theory" onNext={() => setStep(1)} />}
           {step === 1 && (
@@ -297,7 +297,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className={`glass-panel p-6 border-2 grid md:grid-cols-2 gap-6 ${p.colorClass}`}
+                className={`glass-panel p-6 border-2 grid grid-cols-1 md:grid-cols-2 gap-6 ${p.colorClass}`}
               >
                 {/* Left Column: Info */}
                 <div className="flex flex-col gap-4">
@@ -344,7 +344,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
           </p>
         </div>
         <div className="space-y-8 mb-8">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm transition-all hover:shadow-md">
               <h4 className="font-bold text-lg text-blue-800 mb-3 flex items-center gap-2">
                 <Layers className="w-5 h-5" /> {t(TRIANGLE_THEORY.saturatie.title)}
@@ -385,7 +385,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
             <h4 className="font-bold text-lg text-red-800 flex items-center gap-2 border-b border-red-200 pb-3">
               <AlertTriangle className="w-6 h-6 flex-shrink-0" /> {t("Misalignment: valkuilen bij beoordelen en beslissen")}
             </h4>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {MISALIGNMENT_THEORY.map((item, idx) => (
                 <div key={idx} className="bg-white/50 p-3 rounded-lg border border-red-50/50">
                   <h5 className="font-bold text-sm text-red-800 mb-1">{t(item.title)}</h5>
@@ -680,8 +680,8 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
           if (editingLOId === lo.id) {
             return (
               <div key={lo.id} className="glass-panel p-6 flex flex-col gap-4 border-[var(--color-accent)] ring-1 ring-[var(--color-accent)]">
-                <div className="flex gap-4">
-                  <div className="w-24 shrink-0">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="w-full sm:w-24 shrink-0">
                      <label className="text-xs font-bold opacity-80 mb-1 block flex-shrink-0">LUK Nummer</label>
                      <input value={editLONumber} onChange={e=>setEditLONumber(e.target.value)} className="w-full p-2 rounded-lg border focus:border-[var(--color-accent)] outline-none text-sm font-bold text-center" />
                   </div>
@@ -706,14 +706,14 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
               <div className="flex-1">
                 <p className={`font-medium line-clamp-2 opacity-90 ${evidenceCount > 0 ? 'text-green-900' : ''}`}>{t(lo.text)}</p>
                 {hasStarted && (
-                  <div className={`flex gap-4 mt-3 text-sm font-bold ${evidenceCount > 0 ? 'text-green-600' : 'text-[var(--color-accent)]'}`}>
+                  <div className={`flex flex-col sm:flex-row gap-2 sm:gap-4 mt-3 text-sm font-bold ${evidenceCount > 0 ? 'text-green-600' : 'text-[var(--color-accent)]'}`}>
                     <span>{parts.length} LUK-onderdelen</span>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span>{evidenceCount} bewijsstuk{evidenceCount !== 1 && 'ken'}</span>
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex flex-col md:flex-row items-center gap-2 shrink-0 w-full md:w-auto justify-end">
                 <button
                   onClick={() => startEditLO(lo)}
                   className={`p-3 rounded-xl transition-colors md:opacity-0 md:group-hover:opacity-100 ${evidenceCount > 0 ? 'text-green-700 hover:bg-green-100' : 'text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
@@ -741,8 +741,8 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
 
         {isAddingLO ? (
           <div className="glass-panel p-6 flex flex-col gap-4">
-            <div className="flex gap-4">
-               <div className="w-24 shrink-0">
+            <div className="flex flex-col sm:flex-row gap-4">
+               <div className="w-full sm:w-24 shrink-0">
                   <label className="text-xs font-bold opacity-80 mb-1 block">{t("LUK Nummer")}</label>
                   <input value={newLONumber} onChange={e=>setNewLONumber(e.target.value)} className="w-full p-2 rounded-lg border focus:border-[var(--color-accent)] outline-none text-sm font-bold text-center" />
                </div>
@@ -918,7 +918,7 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
         </div>
       </div>
 
-      <div className="grid md:grid-cols-[1fr_auto_1fr] gap-6 items-start mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 items-start mb-10">
         <div>
           <h4 className="font-bold mb-3 text-lg text-center">{t("Selecteer een deel van de LUK:")}</h4>
           <div 
@@ -1224,7 +1224,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
 
                   <div className="mb-2">
                     <label className="block text-xs font-bold opacity-80 mb-1">{t("Kies proxy type")}</label>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
                       {THE_4_PS.map(pt => {
                         const Icon = pt.icon;
                         const isSelected = draftType === pt.id;
@@ -1581,7 +1581,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
           Een betrouwbare beslissing vereist saturatie, triangulatie en intersubjectiviteit. Een juiste beoordeling vermijdt alle vormen van misalignment.
         </p>
         
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 shadow-sm">
             <h4 className="font-bold text-sm text-blue-800 mb-2 flex items-center gap-1.5"><Layers className="w-4 h-4 flex-shrink-0" /> {TRIANGLE_THEORY.saturatie.title}</h4>
             <p className="text-xs opacity-80 leading-relaxed">{TRIANGLE_THEORY.saturatie.text}</p>
@@ -1598,7 +1598,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
 
         <div className="bg-red-50/50 p-4 rounded-xl border border-red-100 shadow-sm">
           <h4 className="font-bold text-sm text-red-800 border-b border-red-200 pb-2 mb-3 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 flex-shrink-0" /> Misalignment: valkuilen bij beoordelen en beslissen</h4>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
             {MISALIGNMENT_THEORY.map(m => (
               <div key={m.title} className="flex flex-col gap-1">
                 <strong className="text-xs text-red-900">{m.title}</strong>
@@ -1612,15 +1612,15 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
       <div className="page-break-after w-full">
         <h3 className="text-2xl font-bold mb-6"><span className="text-[var(--color-accent)]">4P</span> {t("Analyse", "Analysis")}</h3>
         <div className="flex flex-col gap-6 mb-6 w-full">
-          <div className="print-panel p-4 flex flex-row gap-4 items-center w-full">
-            <div className="text-center shrink-0 w-32 border-r border-black/10 pr-4">
+          <div className="print-panel p-4 flex flex-col sm:flex-row gap-4 items-center w-full">
+            <div className="text-center shrink-0 w-full sm:w-32 border-b sm:border-b-0 sm:border-r border-black/10 pb-4 sm:pb-0 pr-0 sm:pr-4">
               <div className="text-2xl font-bold mb-1 text-[var(--color-accent)]">{coveragePercent}%</div>
               <div className="text-xs font-bold text-gray-500 uppercase tracking-wider">Dekking LUK</div>
             </div>
             {uncoveredParts.length > 0 ? (
               <div className="text-xs text-red-600 flex-1 pl-2">
                 <strong className="block mb-1">Niet gedekt:</strong>
-                <ul className="list-disc pl-3 text-[11px] grid grid-cols-2 gap-x-4">
+                <ul className="list-disc pl-3 text-[11px] grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                   {uncoveredParts.map(p => <li key={p.id}>{p.loId}: {p.text}</li>)}
                 </ul>
               </div>
@@ -1629,14 +1629,14 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
             )}
           </div>
           
-          <div className="print-panel p-4 flex flex-row gap-4 items-start w-full">
-            <div className="text-center shrink-0 w-32 border-r border-black/10 pr-4">
+          <div className="print-panel p-4 flex flex-col sm:flex-row gap-4 items-start w-full">
+            <div className="text-center shrink-0 w-full sm:w-32 border-b sm:border-b-0 sm:border-r border-black/10 pb-4 sm:pb-0 pr-0 sm:pr-4">
               <div className="text-2xl font-bold mb-1 text-[var(--color-accent)]">{Object.keys(stakeholderUsage).length}</div>
               <div className="text-xs font-bold text-gray-500 uppercase tracking-wider">Unieke<br/>stakeholders</div>
             </div>
             {Object.keys(stakeholderUsage).length > 0 ? (
               <div className="text-[11px] flex-1 pl-2">
-                <ul className="list-disc pl-3 grid grid-cols-3 gap-x-4">
+                <ul className="list-disc pl-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4">
                   {Object.keys(stakeholderUsage).map(sh => <li key={sh} className="mb-0.5">{t(sh)}</li>)}
                 </ul>
               </div>
@@ -1647,12 +1647,16 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
           
           <div className="print-panel p-4 w-full flex flex-col items-center justify-center">
             <h4 className="text-sm font-bold text-center mb-4 text-gray-500 uppercase tracking-wider">{t("Spreiding van type bewijsmateriaal", "Distribution of evidence types")}</h4>
-            <RadarChart width={500} height={400} cx="50%" cy="50%" outerRadius="75%" data={radarData}>
-              <PolarGrid opacity={0.3} />
-              <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--color-accent)', fontSize: 12, fontWeight: 'bold' }} />
-              <PolarRadiusAxis angle={30} domain={[0, Math.max(1, radarData.reduce((max, d) => Math.max(max, d.A), 0))]} tick={false} axisLine={false} />
-              <Radar name={t("Aantal bewijzen", "Evidence count")} dataKey="A" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.4} />
-            </RadarChart>
+            <div className="w-full h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                  <PolarGrid opacity={0.3} />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--color-accent)', fontSize: 12, fontWeight: 'bold' }} />
+                  <PolarRadiusAxis angle={30} domain={[0, Math.max(1, radarData.reduce((max, d) => Math.max(max, d.A), 0))]} tick={false} axisLine={false} />
+                  <Radar name={t("Aantal bewijzen", "Evidence count")} dataKey="A" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.4} />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
@@ -1682,7 +1686,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               <div className="print-grid mb-4">
                 <div className="print-col">
                   <strong>{t("Gebruikte Proxies:")}</strong>
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {THE_4_PS.map(pt => usedProxyTypes.includes(pt.id) && (
                       <span key={pt.id} className="border px-2 py-1 text-xs rounded">{pt.label}</span>
                     ))}
@@ -1699,7 +1703,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               </div>
               
               {usedProxyTypes.length > 0 && (
-                <div className="grid grid-cols-2 gap-4 mb-4 text-[10px] opacity-80 border-l-2 border-[var(--color-accent)] pl-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 text-[10px] opacity-80 border-l-2 border-[var(--color-accent)] pl-3">
                   <div>
                     <strong className="block mb-1 text-xs">{t("Sterktes:")}</strong>
                     <ul className="list-disc pl-3 space-y-1">
@@ -1770,7 +1774,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
       </div>
 
       <div className="glass-panel p-6 mb-12">
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 flex flex-col gap-6">
             <div 
               onClick={() => setShowCoverageModal(true)}
@@ -1863,7 +1867,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                           <span className="bg-[var(--color-accent)] text-white px-2 py-1 rounded text-sm font-bold shrink-0">{lo.id}</span>
                         </div>
                         <div className="flex items-center gap-4 shrink-0">
-                          <div className="flex gap-1">
+                          <div className="flex flex-wrap gap-1">
                             {THE_4_PS.map(pt => {
                               const isUsed = usedProxyTypes.includes(pt.id);
                               if (!isUsed) return null;
@@ -1923,7 +1927,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                                 })}
                               </div>
 
-                              <div className="grid md:grid-cols-2 gap-8 mt-6">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
                                 <div>
                                   <h4 className="text-xs font-bold uppercase tracking-wider opacity-50 mb-3">{t("Sterktes van ingezette proxies")}</h4>
                                   <ul className="space-y-3">
