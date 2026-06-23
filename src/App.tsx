@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Target, FileText, Award, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, RefreshCw, User, Plus, Trash2, Info, ChevronLeft, ChevronRight, LayoutDashboard, X, ExternalLink, PieChart, Users, CheckCircle2, ChevronDown, ChevronUp, RotateCcw, Triangle, Search, Pencil, Edit2, Layers } from 'lucide-react';
+import { BookOpen, Target, FileText, Award, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, RefreshCw, User, Plus, Trash2, Info, ChevronLeft, ChevronRight, LayoutDashboard, X, ExternalLink, PieChart, Users, CheckCircle2, ChevronDown, ChevronUp, RotateCcw, Triangle, Search, Pencil, Edit2, Layers, Globe } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import html2pdf from 'html2pdf.js';
-import { LEARNING_OUTCOMES, EVL_1_FYSIO, THE_4_PS, PType, TRIANGLE_THEORY, MISALIGNMENT_THEORY, AFSTUDEERONDERZOEK_DEFAULT_PORTFOLIO } from './data';
+import { useTranslation, Language } from './i18n';
+import { LEARNING_OUTCOMES, EVL_1_FYSIO, THE_4_PS, PType, TRIANGLE_THEORY, MISALIGNMENT_THEORY, AFSTUDEERONDERZOEK_DEFAULT_PORTFOLIO, NEW_EVL_OUTCOMES, NEW_EVL_DEFAULT_PORTFOLIO, EVL4_OUTCOMES, EVL4_DEFAULT_PORTFOLIO } from './data';
 
 interface Evidence {
   id: string;
@@ -30,11 +31,12 @@ const HIGHLIGHT_COLORS = [
 ];
 
 export default function App() {
+  const { lang, setLang, t } = useTranslation();
   const [step, setStep] = useState(0);
   const [currentLOId, setCurrentLOId] = useState<string | null>(null);
   const [portfolio, setPortfolio] = useState<Record<string, LOPart[]>>({});
   const [learningOutcomes, setLearningOutcomes] = useState<{id: string, text: string}[]>([]);
-  const [evlName, setEvlName] = useState("Afstudeeronderzoek");
+  const [evlName, setEvlName] = useState("");
   const [targetPartId, setTargetPartId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function App() {
   };
 
   const restartAnalysis = () => {
-    if (window.confirm("Weet je zeker dat je de hele analyse wilt wissen en opnieuw wilt beginnen?")) {
+    if (window.confirm(t("Weet je zeker dat je de hele analyse wilt wissen en opnieuw wilt beginnen?", "Are you sure you want to clear the entire analysis and start over?"))) {
       setPortfolio({});
       setCurrentLOId(null);
       setStep(0);
@@ -91,13 +93,13 @@ export default function App() {
   return (
     <div className="min-h-screen font-sans selection:bg-[var(--color-accent)] selection:text-white pb-20">
       <header className="glass-header sticky top-0 z-10 border-b border-black/5 bg-white/80 backdrop-blur-md">
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 text-[var(--color-accent)] font-extrabold text-xl tracking-tight cursor-pointer" onClick={() => setStep(0)}>
             <Target className="w-6 h-6" />
-            <span>4Portfolio</span>
+            <span>{t("4Portfolio")}</span>
           </div>
           
-          <nav className="hidden md:flex items-center gap-3 text-sm font-medium">
+          <nav className="hidden md:flex flex-1 justify-center items-center gap-3 text-sm font-medium">
              <button onClick={() => setStep(0)} className={`hover:text-[var(--color-accent)] transition-colors flex items-center ${step === 0 ? 'text-[var(--color-accent)] font-bold' : 'opacity-60'}`}>
                1. Start
              </button>
@@ -106,7 +108,7 @@ export default function App() {
                <>
                  <ChevronRight className="w-3 h-3 opacity-30" />
                  <button onClick={goToDashboard} className={`hover:text-[var(--color-accent)] transition-colors flex items-center ${step === 1 ? 'text-[var(--color-accent)] font-bold' : 'opacity-60'}`}>
-                   2. LUK Overzicht
+                   2. LUK {t("Overzicht", "Overview")}
                  </button>
                </>
              )}
@@ -115,11 +117,11 @@ export default function App() {
                <>
                  <ChevronRight className="w-3 h-3 opacity-30" />
                  <button onClick={() => setStep(2)} className={`hover:text-[var(--color-accent)] transition-colors flex items-center ${step === 2 ? 'text-[var(--color-accent)] font-bold' : 'opacity-60'}`}>
-                   3. Opsplitsen
+                   3. {t("Opsplitsen", "Split")}
                  </button>
                  <ChevronRight className="w-3 h-3 opacity-30" />
                  <button onClick={() => setStep(3)} className={`hover:text-[var(--color-accent)] transition-colors flex items-center ${step === 3 ? 'text-[var(--color-accent)] font-bold' : 'opacity-60'}`}>
-                   4. Bewijs Ontwerpen
+                   4. {t("Bewijs Ontwerpen", "Design Evidence")}
                  </button>
                </>
              )}
@@ -128,19 +130,27 @@ export default function App() {
                <>
                  <ChevronRight className="w-3 h-3 opacity-30" />
                  <button onClick={() => setStep(4)} className={`hover:text-[var(--color-accent)] transition-colors flex items-center ${step === 4 ? 'text-[var(--color-accent)] font-bold' : 'opacity-60'}`}>
-                   {step === 2 || step === 3 ? '5' : '3'}. <span className="text-[var(--color-accent)] mx-1">4P</span> Analyse
+                   {step === 2 || step === 3 ? '5' : '3'}. <span className="text-[var(--color-accent)] mx-1">4P</span> {t("Analyse", "Analysis")}
                  </button>
                </>
              )}
           </nav>
 
-          <div className="flex gap-1 md:hidden">
-            {[0, 1, 2, 3, 4].map(i => (
-              <div 
-                key={i} 
-                className={`h-2 w-3 rounded-full transition-colors duration-300 ${i <= step ? 'bg-[var(--color-accent)]' : 'bg-black/10'}`}
-              />
-            ))}
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setLang(lang === 'nl' ? 'en' : 'nl')}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 hover:bg-black/10 transition-colors text-sm font-bold opacity-80"
+            >
+              {lang === 'nl' ? 'EN' : 'NL'}
+            </button>
+            <div className="flex gap-1 md:hidden">
+              {[0, 1, 2, 3, 4].map(i => (
+                <div 
+                  key={i} 
+                  className={`h-2 w-3 rounded-full transition-colors duration-300 ${i <= step ? 'bg-[var(--color-accent)]' : 'bg-black/10'}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </header>
@@ -221,7 +231,7 @@ export default function App() {
                   loId={currentLOId}
                   parts={portfolio[currentLOId] || []}
                   setParts={(parts) => updateParts(currentLOId, parts)}
-                  onNext={goToDashboard} 
+                  onNext={() => setStep(4)} 
                   onBack={() => setStep(2)}
                   portfolio={portfolio}
                   targetPartId={targetPartId}
@@ -247,6 +257,7 @@ export default function App() {
 }
 
 function Theory({ onNext }: { key?: string, onNext: () => void }) {
+  const { t } = useTranslation();
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -259,7 +270,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
           <span className="text-[var(--color-accent)]">4Portfolio</span>
         </h1>
         <p className="opacity-80 max-w-2xl mx-auto mb-10 text-lg">
-          Portfolio-ontwerptool om leeruitkomsten aan te tonen
+          {t("Portfolio-ontwerptool om leeruitkomsten aan te tonen")}
         </p>
         
         <button onClick={onNext} className="btn-primary text-xl px-10 py-4 shadow-xl">
@@ -269,10 +280,10 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
 
       <div id="framework-section" className="py-12 border-b border-black/10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Het 4Ps Framework</h2>
+          <h2 className="text-3xl font-bold mb-4">{t("Het 4Ps Framework")}</h2>
           <p className="opacity-80 max-w-2xl mx-auto text-lg">
-            Een beoordeling wordt idealiter ondersteund door een mix van indirecte metingen: proxies.<br/>
-            <a href="https://www.tandfonline.com/doi/full/10.1080/02602938.2026.2620053#abstract" target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)] font-bold hover:underline">Fawns et al. (2026)</a> beschrijven er vier.
+            {t("Beoordelingen worden gegeven op (een mix van) indirecte metingen: proxies.")}<br/>
+            <a href="https://www.tandfonline.com/doi/full/10.1080/02602938.2026.2620053#abstract" target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)] font-bold hover:underline">Fawns et al. (2026)</a> {t("beschrijven er vier.", "describe four of them.")}
           </p>
         </div>
 
@@ -294,14 +305,14 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
                       <Icon className="w-8 h-8" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold">{p.label}</h3>
-                      <p className="opacity-90 font-medium">{p.beschrijving}</p>
+                      <h3 className="text-2xl font-bold">{t(p.label)}</h3>
+                      <p className="opacity-90 font-medium">{t(p.beschrijving)}</p>
                     </div>
                   </div>
                   
                   <div className="space-y-1 mt-auto text-sm bg-white/30 p-3 rounded-lg">
-                    <p><strong>Focus:</strong> {p.focus}</p>
-                    <p><strong>Voorbeelden:</strong> {p.voorbeelden}</p>
+                    <p><strong>{t("Focus:")}</strong> {t(p.focus)}</p>
+                    <p><strong>{t("Voorbeelden:")}</strong> {t(p.voorbeelden)}</p>
                   </div>
                 </div>
 
@@ -309,12 +320,12 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
                 <div className="flex flex-col gap-4">
                   <div className="bg-green-50/70 p-3 rounded-lg border border-green-200 flex-1 flex flex-col justify-center">
                     <p className="text-sm text-green-900 leading-relaxed">
-                      <strong>Voordelen:</strong> {p.voordelen}
+                      <strong>{t("Voordelen:")}</strong> {t(p.voordelen)}
                     </p>
                   </div>
                   <div className="bg-red-50/70 p-3 rounded-lg border border-red-200 flex-1 flex flex-col justify-center">
                     <p className="text-sm text-red-900 leading-relaxed">
-                      <strong>Beperkingen:</strong> {p.beperkingen}
+                      <strong>{t("Beperkingen:")}</strong> {t(p.beperkingen)}
                     </p>
                   </div>
                 </div>
@@ -326,33 +337,33 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
 
       <div className="py-12">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">Betrouwbaar beoordelen & beslissen</h2>
+          <h2 className="text-3xl font-bold mb-4">{t("Betrouwbaar beoordelen & beslissen")}</h2>
           <p className="opacity-80 max-w-2xl mx-auto text-lg hover:text-black">
-            Een betrouwbare beslissing vereist een rijke mix van de 4Ps over de gehele linie en een juiste beoordeling vermijdt misalignment.
+            {t("Een betrouwbare beslissing vereist een rijke mix van de 4Ps over de gehele linie en een juiste beoordeling vermijdt misalignment.")}
           </p>
         </div>
         <div className="space-y-8 mb-8">
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm transition-all hover:shadow-md">
               <h4 className="font-bold text-lg text-blue-800 mb-3 flex items-center gap-2">
-                <Layers className="w-5 h-5" /> {TRIANGLE_THEORY.saturatie.title}
+                <Layers className="w-5 h-5" /> {t(TRIANGLE_THEORY.saturatie.title)}
               </h4>
-              <p className="text-sm opacity-80 leading-relaxed mb-2">{TRIANGLE_THEORY.saturatie.text}</p>
+              <p className="text-sm opacity-80 leading-relaxed mb-2">{t(TRIANGLE_THEORY.saturatie.text)}</p>
               <p className="text-xs opacity-50 italic">{TRIANGLE_THEORY.saturatie.source}</p>
             </div>
             <div className="bg-purple-50/50 p-6 rounded-xl border border-purple-100 shadow-sm transition-all hover:shadow-md">
               <h4 className="font-bold text-lg text-purple-800 mb-3 flex items-center gap-2">
-                <Triangle className="w-5 h-5" /> {TRIANGLE_THEORY.triangulatie.title}
+                <Triangle className="w-5 h-5" /> {t(TRIANGLE_THEORY.triangulatie.title)}
               </h4>
               <p className="text-sm opacity-80 leading-relaxed mb-2">
-                {TRIANGLE_THEORY.triangulatie.text.split('onderstaand 4Ps framework').map((part, i) => (
+                {t(TRIANGLE_THEORY.triangulatie.text).split('bovenstaand 4Ps framework').map((part, i) => (
                   <React.Fragment key={i}>
                     {i > 0 && (
                       <button 
                         onClick={() => document.getElementById('framework-section')?.scrollIntoView({ behavior: 'smooth' })} 
                         className="text-purple-700 font-bold hover:underline"
                       >
-                        bovenstaand 4Ps framework
+                        {t('bovenstaand 4Ps framework', 'the 4Ps framework')}
                       </button>
                     )}
                     {part}
@@ -363,31 +374,31 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
             </div>
             <div className="bg-emerald-50/50 p-6 rounded-xl border border-emerald-100 shadow-sm transition-all hover:shadow-md">
               <h4 className="font-bold text-lg text-emerald-800 mb-3 flex items-center gap-2">
-                <Users className="w-5 h-5" /> {TRIANGLE_THEORY.intersubjectiviteit.title}
+                <Users className="w-5 h-5" /> {t(TRIANGLE_THEORY.intersubjectiviteit.title)}
               </h4>
-              <p className="text-sm opacity-80 leading-relaxed mb-2">{TRIANGLE_THEORY.intersubjectiviteit.text}</p>
+              <p className="text-sm opacity-80 leading-relaxed mb-2">{t(TRIANGLE_THEORY.intersubjectiviteit.text)}</p>
               <p className="text-xs opacity-50 italic">{TRIANGLE_THEORY.intersubjectiviteit.source}</p>
             </div>
           </div>
           <div className="bg-red-50/50 p-6 rounded-xl border border-red-100 shadow-sm flex flex-col gap-4 transition-all hover:shadow-md">
             <h4 className="font-bold text-lg text-red-800 flex items-center gap-2 border-b border-red-200 pb-3">
-              <AlertTriangle className="w-6 h-6 flex-shrink-0" /> Misalignment: valkuilen bij beoordelen en beslissen
+              <AlertTriangle className="w-6 h-6 flex-shrink-0" /> {t("Misalignment: valkuilen bij beoordelen en beslissen")}
             </h4>
             <div className="grid md:grid-cols-2 gap-6">
               {MISALIGNMENT_THEORY.map((item, idx) => (
                 <div key={idx} className="bg-white/50 p-3 rounded-lg border border-red-50/50">
-                  <h5 className="font-bold text-sm text-red-800 mb-1">{item.title}</h5>
-                  <p className="text-sm opacity-80 leading-relaxed">{item.desc}</p>
+                  <h5 className="font-bold text-sm text-red-800 mb-1">{t(item.title)}</h5>
+                  <p className="text-sm opacity-80 leading-relaxed">{t(item.desc)}</p>
                 </div>
               ))}
             </div>
-            <p className="text-xs opacity-60 italic mt-2 text-right">Naar: Fawns et al. (2026)</p>
+            <p className="text-xs opacity-60 italic mt-2 text-right">{t("Naar: Fawns et al. (2026)", "Adapted from: Fawns et al. (2026)")}</p>
           </div>
         </div>
 
         <div className="text-center text-sm opacity-60">
-          <p>Auteur: <a href="https://www.linkedin.com/in/tim-gerbrands" target="_blank" rel="noopener noreferrer" className="hover:underline text-[var(--color-accent)] font-bold">Tim A. Gerbrands</a></p>
-          <p>Laatst bijgewerkt: 16 april 2026</p>
+          <p>{t("Auteur:")} <a href="https://www.linkedin.com/in/tim-gerbrands" target="_blank" rel="noopener noreferrer" className="hover:underline text-[var(--color-accent)] font-bold">Tim A. Gerbrands</a></p>
+          <p>{t("Laatst bijgewerkt:")} 16 april 2026</p>
         </div>
       </div>
     </motion.div>
@@ -408,6 +419,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
   onRestart: () => void,
   updateLO: (oldId: string, newId: string, text: string) => void
 }) {
+  const { t } = useTranslation();
   const totalEvidence = Object.values(portfolio).flatMap(parts => parts.flatMap(p => p.evidence)).length;
   const [newLOText, setNewLOText] = useState('');
   const [newLONumber, setNewLONumber] = useState('');
@@ -437,7 +449,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
   const startEditLO = (lo: {id: string, text: string}) => {
     setEditingLOId(lo.id);
     setEditLONumber(lo.id);
-    setEditLOText(lo.text);
+    setEditLOText(t(lo.text));
   };
 
   const saveEditLO = (oldId: string) => {
@@ -454,43 +466,48 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
     >
       <div className="flex items-center justify-between mb-6">
         <button onClick={onBack} className="text-sm font-bold opacity-60 hover:opacity-100 flex items-center gap-1">
-          <ArrowLeft className="w-4 h-4" /> Terug naar theorie
+          <ArrowLeft className="w-4 h-4" /> {t("Terug naar theorie")}
         </button>
       </div>
 
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2 group">
-            <span className="text-3xl font-bold opacity-80">Naam van EvL:</span>
+            <span className="text-3xl font-bold opacity-80">{t("Naam van EvL:", "Set of LOU:")}</span>
             <div className="relative">
               <input 
                 type="text" 
                 value={evlName} 
                 onChange={(e) => setEvlName(e.target.value)}
-                className="text-3xl font-bold bg-transparent border-b-2 border-dashed border-gray-300 hover:border-[var(--color-glass-border)] focus:border-[var(--color-accent)] outline-none transition-colors min-w-[400px] w-auto max-w-full text-[var(--color-accent)] pr-8"
+                placeholder={t("Voer naam in")}
+                className="text-3xl font-bold bg-transparent border-b-2 border-dashed border-gray-300 hover:border-[var(--color-glass-border)] focus:border-[var(--color-accent)] outline-none transition-colors min-w-[400px] w-auto max-w-full text-[var(--color-accent)] pr-8 placeholder-gray-400"
                 title="Pas de naam van de EvL aan"
               />
               <Pencil className="w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 opacity-30 group-hover:opacity-100 pointer-events-none transition-opacity text-[var(--color-accent)]" />
             </div>
           </div>
-          <p className="opacity-80 mb-3">Kies een leeruitkomst om te analyseren en bewijsstukken te koppelen.</p>
+          <p className="opacity-80 mb-3">{t("Kies een leeruitkomst om te analyseren en bewijsstukken te koppelen.")}</p>
           <div className="flex items-center gap-2">
-            <span className="text-sm opacity-60 font-bold">Inladen:</span>
+            <span className="text-sm opacity-60 font-bold">{t("Inladen:", "Load preset:")}</span>
             <button 
               onClick={() => { 
-                setEvlName("Afstudeeronderzoek"); 
-                setLearningOutcomes(LEARNING_OUTCOMES); 
-                setPortfolio(JSON.parse(JSON.stringify(AFSTUDEERONDERZOEK_DEFAULT_PORTFOLIO)));
+                setEvlName(t("EvL1, geen proxy-mix", "Set1, no proxy mix")); 
+                setLearningOutcomes(NEW_EVL_OUTCOMES); 
+                setPortfolio(JSON.parse(JSON.stringify(NEW_EVL_DEFAULT_PORTFOLIO)));
               }}
               className="text-sm bg-white/50 border border-black/10 hover:border-[var(--color-accent)] px-3 py-1 rounded-full transition-colors"
             >
-              Afstudeeronderzoek
+              {t("EvL1, geen proxy-mix", "Set1, no proxy mix")}
             </button>
             <button 
-              onClick={() => { setEvlName("EvL 1, Fysiotherapie"); setLearningOutcomes(EVL_1_FYSIO); }}
+              onClick={() => { 
+                setEvlName(t("EvL4, proxy-mix", "Set4, proxy mix")); 
+                setLearningOutcomes(EVL4_OUTCOMES); 
+                setPortfolio(JSON.parse(JSON.stringify(EVL4_DEFAULT_PORTFOLIO)));
+              }}
               className="text-sm bg-white/50 border border-black/10 hover:border-[var(--color-accent)] px-3 py-1 rounded-full transition-colors"
             >
-              EvL 1, Fysiotherapie
+              {t("EvL4, proxy-mix", "Set4, proxy mix")}
             </button>
           </div>
         </div>
@@ -499,7 +516,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
           disabled={totalEvidence === 0}
           className={`btn-primary flex items-center gap-2 text-white ${totalEvidence === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          <LayoutDashboard className="w-5 h-5" /> <span>4P Analyse</span>
+          <LayoutDashboard className="w-5 h-5" /> <span>4P {t("Analyse", "Analysis")}</span>
         </button>
       </div>
 
@@ -536,7 +553,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
                 {lo.id}
               </div>
               <div className="flex-1">
-                <p className={`font-medium line-clamp-2 opacity-90 ${evidenceCount > 0 ? 'text-green-900' : ''}`}>{lo.text}</p>
+                <p className={`font-medium line-clamp-2 opacity-90 ${evidenceCount > 0 ? 'text-green-900' : ''}`}>{t(lo.text)}</p>
                 {hasStarted && (
                   <div className={`flex gap-4 mt-3 text-sm font-bold ${evidenceCount > 0 ? 'text-green-600' : 'text-[var(--color-accent)]'}`}>
                     <span>{parts.length} LUK-onderdelen</span>
@@ -557,7 +574,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
                   onClick={() => onStartLO(lo.id)}
                   className={`px-6 py-3 rounded-xl border-2 font-bold transition-colors flex items-center gap-2 ${evidenceCount > 0 ? 'border-green-600 text-green-700 hover:bg-green-600 hover:text-white' : 'border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
                 >
-                  {hasStarted ? 'Bewerk' : 'Start'} <ChevronRight className="w-4 h-4" />
+                  {hasStarted ? t('Bewerk') : 'Start'} <ChevronRight className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={() => handleDeleteLO(lo.id)}
@@ -575,22 +592,22 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
           <div className="glass-panel p-6 flex flex-col gap-4">
             <div className="flex gap-4">
                <div className="w-24 shrink-0">
-                  <label className="text-xs font-bold opacity-80 mb-1 block">LUK Nummer</label>
+                  <label className="text-xs font-bold opacity-80 mb-1 block">{t("LUK Nummer")}</label>
                   <input value={newLONumber} onChange={e=>setNewLONumber(e.target.value)} className="w-full p-2 rounded-lg border focus:border-[var(--color-accent)] outline-none text-sm font-bold text-center" />
                </div>
                <div className="flex-1">
-                  <label className="text-xs font-bold opacity-80 mb-1 block">Beschrijving</label>
+                  <label className="text-xs font-bold opacity-80 mb-1 block">{t("Beschrijving")}</label>
                   <textarea 
                     value={newLOText}
                     onChange={(e) => setNewLOText(e.target.value)}
-                    placeholder="Typ hier de nieuwe leeruitkomst..."
+                    placeholder={t("Typ hier de nieuwe leeruitkomst...")}
                     className="w-full p-2 rounded-lg border focus:border-[var(--color-accent)] outline-none text-sm resize-none h-20"
                   />
                </div>
             </div>
             <div className="flex justify-end gap-2 mt-2">
-              <button onClick={() => setIsAddingLO(false)} className="px-4 py-2 rounded-xl font-bold opacity-70 hover:opacity-100 text-sm">Annuleren</button>
-              <button onClick={handleAddLO} className="btn-primary py-2 px-6 text-sm">Toevoegen</button>
+              <button onClick={() => setIsAddingLO(false)} className="px-4 py-2 rounded-xl font-bold opacity-70 hover:opacity-100 text-sm">{t("Annuleren")}</button>
+              <button onClick={handleAddLO} className="btn-primary py-2 px-6 text-sm">{t("Toevoegen")}</button>
             </div>
           </div>
         ) : (
@@ -598,7 +615,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
             onClick={onTriggerAddLO}
             className="w-full py-4 border-2 border-dashed border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors rounded-xl font-bold flex items-center justify-center gap-2"
           >
-            <Plus className="w-5 h-5" /> Voeg een Leeruitkomst toe
+            <Plus className="w-5 h-5" /> {t("Voeg een Leeruitkomst toe")}
           </button>
         )}
       </div>
@@ -607,6 +624,7 @@ function Dashboard({ portfolio, setPortfolio, learningOutcomes, setLearningOutco
 }
 
 function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, onNextLO, onPrevLO, hasNextLO, hasPrevLO }: { key?: string, loId: string, parts: LOPart[], setParts: (parts: LOPart[]) => void, onNext: () => void, onBack: () => void, learningOutcomes: {id: string, text: string}[], onNextLO: () => void, onPrevLO: () => void, hasNextLO: boolean, hasPrevLO: boolean }) {
+  const { t } = useTranslation();
   const lo = learningOutcomes.find(l => l.id === loId);
   const [selection, setSelection] = useState('');
 
@@ -635,15 +653,15 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
 
   const renderHighlightedText = () => {
     if (!lo) return null;
-    if (parts.length === 0) return lo.text;
+    if (parts.length === 0) return t(lo.text);
 
-    let elements: React.ReactNode[] = [lo.text];
+    let elements: React.ReactNode[] = [t(lo.text)];
     
     parts.forEach((part) => {
       elements = elements.flatMap((el, index) => {
         if (typeof el !== 'string') return el;
         
-        const pieces = el.split(part.text);
+        const pieces = el.split(t(part.text));
         if (pieces.length === 1) return el;
 
         const newElements: React.ReactNode[] = [];
@@ -652,7 +670,7 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
           if (i < pieces.length - 1) {
             newElements.push(
               <mark key={`${part.id}-${index}-${i}`} className={`px-1 rounded ${part.colorClass}`}>
-                {part.text}
+                {t(part.text)}
               </mark>
             );
           }
@@ -673,29 +691,29 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
     >
       <div className="flex justify-between items-center mb-6">
         <button onClick={onBack} className="text-sm font-bold opacity-60 hover:opacity-100 flex items-center gap-1">
-          <ArrowLeft className="w-4 h-4" /> Terug naar overzicht
+          <ArrowLeft className="w-4 h-4" /> {t("Terug naar overzicht", "Back to overview")}
         </button>
         <div className="flex gap-4">
           <button onClick={onPrevLO} disabled={!hasPrevLO} className={`text-sm font-bold flex items-center gap-1 ${hasPrevLO ? 'opacity-60 hover:opacity-100' : 'opacity-20 cursor-not-allowed'}`}>
-            <ChevronLeft className="w-4 h-4" /> Vorige LUK
+            <ChevronLeft className="w-4 h-4" /> {t("Vorige LUK")}
           </button>
           <button onClick={onNextLO} disabled={!hasNextLO} className={`text-sm font-bold flex items-center gap-1 ${hasNextLO ? 'opacity-60 hover:opacity-100' : 'opacity-20 cursor-not-allowed'}`}>
-            Volgende LUK <ChevronRight className="w-4 h-4" />
+            {t("Volgende LUK")} <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-black/10 gap-4">
         <div className="text-left">
-          <h2 className="text-sm font-bold text-[var(--color-accent)] uppercase tracking-wider mb-1">Leeruitkomst {loId}</h2>
-          <h3 className="text-2xl font-bold">Splits de LUK evt. op in delen</h3>
+          <h2 className="text-sm font-bold text-[var(--color-accent)] uppercase tracking-wider mb-1">{t("Leeruitkomst")} {loId}</h2>
+          <h3 className="text-2xl font-bold">{t("Splits de LUK evt. op in delen")}</h3>
         </div>
         <div className="flex gap-4">
           <button 
             onClick={() => {
               setParts([{
                 id: Date.now().toString(),
-                text: lo.text,
+                text: t(lo.text, lo.text),
                 evidence: [],
                 colorClass: 'bg-blue-100 text-blue-900'
               }]);
@@ -703,21 +721,21 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
             }}
             className="btn-secondary py-2.5 px-6 border border-black/20 hover:bg-black/5"
           >
-            Sla over
+            {t("Sla over")}
           </button>
           <button 
             onClick={onNext} 
             disabled={parts.length === 0}
             className={`btn-primary py-2.5 px-8 shrink-0 ${parts.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            KLAAR
+            {t("KLAAR")}
           </button>
         </div>
       </div>
 
       <div className="grid md:grid-cols-[1fr_auto_1fr] gap-6 items-start mb-10">
         <div>
-          <h4 className="font-bold mb-3 text-lg text-center">Selecteer een deel van de LUK:</h4>
+          <h4 className="font-bold mb-3 text-lg text-center">{t("Selecteer een deel van de LUK:")}</h4>
           <div 
             onMouseUp={handleMouseUp} 
             className="text-xl leading-relaxed glass-panel p-8 cursor-text select-text border-2 border-dashed border-[var(--color-accent)]/50 hover:border-[var(--color-accent)] transition-colors relative"
@@ -742,11 +760,11 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
         </div>
 
         <div>
-          <h4 className="font-bold mb-3 text-lg text-center">LUK-onderdelen</h4>
+          <h4 className="font-bold mb-3 text-lg text-center">{t("LUK-onderdelen")}</h4>
           <div className="space-y-3">
             {parts.length === 0 && (
               <div className="text-center p-6 glass-panel opacity-60 italic">
-                Nog geen LUK-onderdelen gemaakt. Selecteer tekst links.
+                {t("Nog geen LUK-onderdelen gemaakt. Selecteer tekst links.")}
               </div>
             )}
             <AnimatePresence>
@@ -763,7 +781,7 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
                   </div>
                   <input 
                     type="text"
-                    value={part.text}
+                    value={t(part.text)}
                     onChange={(e) => updatePartText(part.id, e.target.value)}
                     className="flex-1 font-medium bg-transparent border-b border-transparent hover:border-[var(--color-glass-border)] focus:border-[var(--color-accent)] outline-none transition-colors px-2 py-1"
                   />
@@ -785,7 +803,15 @@ function Step1Split({ loId, parts, setParts, onNext, onBack, learningOutcomes, o
 }
 
 function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, targetPartId }: { key?: string, loId: string, parts: LOPart[], setParts: (parts: LOPart[]) => void, onNext: () => void, onBack: () => void, portfolio: Record<string, LOPart[]>, targetPartId?: string | null }) {
+  const { t } = useTranslation();
   const [activePartId, setActivePartId] = useState<string | null>(targetPartId || parts[0]?.id || null);
+
+  useEffect(() => {
+    if (!activePartId && parts.length > 0) {
+      setActivePartId(parts[0].id);
+    }
+  }, [parts, activePartId]);
+
   const [draftName, setDraftName] = useState('');
   const [draftStakeholders, setDraftStakeholders] = useState<string[]>([]);
   const [stakeholderInput, setStakeholderInput] = useState('');
@@ -797,7 +823,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
 
   const allStakeholders = useMemo(() => {
     const stakeholders = Object.values(portfolio)
-      .flatMap(parts => parts.flatMap(p => p.evidence.flatMap(e => e.stakeholders ? e.stakeholders.split(',').map(s=>s.trim()) : [])))
+      .flatMap(parts => (parts || []).flatMap(p => (p.evidence || []).flatMap(e => e.stakeholders ? e.stakeholders.split(',').map(s=>s.trim()) : [])))
       .filter(Boolean);
     return Array.from(new Set(stakeholders));
   }, [portfolio]);
@@ -875,16 +901,16 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
       exit={{ opacity: 0, y: -20 }}
     >
       <button onClick={onBack} className="mb-6 text-sm font-bold opacity-60 hover:opacity-100 flex items-center gap-1">
-        <ArrowLeft className="w-4 h-4" /> Terug naar opsplitsen
+        <ArrowLeft className="w-4 h-4" /> {t("Terug naar opsplitsen", "Back to split screen")}
       </button>
 
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 pb-4 border-b border-black/10 gap-4">
         <div>
-          <h3 className="text-2xl md:text-3xl font-bold mb-2">Ontwerp bewijs voor LUK {loId}</h3>
-          <p className="text-sm font-bold opacity-80 decoration-[var(--color-accent)] decoration-2 underline-offset-4 mb-1">Let in het proces op dat de samenhang tussen LUK-onderdelen niet verloren gaat.</p>
+          <h3 className="text-2xl md:text-3xl font-bold mb-2">{t("Ontwerp bewijs voor LUK")} {loId}</h3>
+          <p className="text-sm font-bold opacity-80 decoration-[var(--color-accent)] decoration-2 underline-offset-4 mb-1">{t("Let in het proces op dat de samenhang tussen LUK-onderdelen niet verloren gaat.")}</p>
         </div>
         <button onClick={onNext} className="btn-primary shrink-0 py-2.5 px-8 mt-1">
-          KLAAR
+          {t("KLAAR")}
         </button>
       </div>
 
@@ -897,7 +923,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
             {/* Top Navigatie voor LUK-onderdelen */}
             <div className="bg-black/5 p-2 flex overflow-x-auto gap-2 scrollbar-hide border-b border-black/10">
               {parts.map((p, i) => {
-                const hasEvidence = p.evidence.length > 0;
+                const hasEvidence = (p.evidence || []).length > 0;
                 const isSelected = activePartId === p.id;
                 return (
                   <button
@@ -913,7 +939,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
                     <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] ${isSelected ? 'bg-[var(--color-accent)] text-white' : 'bg-black/10'}`}>
                       {i + 1}
                     </div>
-                    Onderdeel {i + 1}
+                    {t("Onderdeel")} {i + 1}
                     {!hasEvidence && <span className="text-[10px] text-red-500 font-extrabold ml-1">(!)</span >}
                   </button>
                 )
@@ -921,26 +947,26 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
             </div>
 
             {/* Invoervelden voor geselecteerde part */}
-            {activePart && (
+            {activePart ? (
               <div className="p-6 flex flex-col justify-between min-h-[420px]">
                 <div>
                   <div className="h-[60px] mb-2">
-                    <h4 className="font-bold text-[13px] opacity-90 leading-snug line-clamp-3" title={activePart.text}>{activePart.text}</h4>
+                    <h4 className="font-bold text-[13px] opacity-90 leading-snug line-clamp-3" title={t(activePart.text)}>{t(activePart.text)}</h4>
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-4 mb-4">
                     <div className="flex-1">
-                      <label className="block text-xs font-bold opacity-80 mb-1">Naam bewijsstuk</label>
+                      <label className="block text-xs font-bold opacity-80 mb-1">{t("Naam bewijsstuk")}</label>
                       <input 
                         type="text"
                         value={draftName}
                         onChange={(e) => setDraftName(e.target.value)}
-                        placeholder="Reflectieverslag, video..."
+                        placeholder={t("Reflectieverslag, video...")}
                         className={`w-full glass-item px-3 py-2 outline-none focus:border-[var(--color-accent)] transition-colors text-sm ${!draftName.trim() ? 'border-red-300 bg-red-50/50' : ''}`}
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="block text-xs font-bold opacity-80 mb-1">Betrokken stakeholders</label>
+                      <label className="block text-xs font-bold opacity-80 mb-1">{t("Betrokken stakeholders")}</label>
                       {draftStakeholders.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {draftStakeholders.map(s => (
@@ -989,7 +1015,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
                             }
                           }
                         }}
-                        placeholder={draftStakeholders.length === 0 ? "Typ en druk op Enter..." : "Nog een stakeholder..."}
+                        placeholder={draftStakeholders.length === 0 ? t("Typ en druk op Enter...") : t("Nog een stakeholder...")}
                         className="w-full glass-item px-3 py-2 outline-none focus:border-[var(--color-accent)] transition-colors text-sm mb-2"
                       />
                       {allStakeholders.filter(s => !draftStakeholders.includes(s)).length > 0 && (
@@ -1012,7 +1038,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
                   </div>
 
                   <div className="mb-2">
-                    <label className="block text-xs font-bold opacity-80 mb-1">Kies proxy type</label>
+                    <label className="block text-xs font-bold opacity-80 mb-1">{t("Kies proxy type")}</label>
                     <div className="grid grid-cols-4 gap-2">
                       {THE_4_PS.map(pt => {
                         const Icon = pt.icon;
@@ -1063,14 +1089,19 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
                       !draftName.trim() || !draftType ? 'bg-slate-300 cursor-not-allowed' : 'bg-[var(--color-accent)] hover:bg-opacity-90 shadow-md'
                     }`}
                   >
-                    {editingEvidenceId ? <><Edit2 className="w-4 h-4" /> Update bewijs</> : <><Plus className="w-4 h-4" /> Voeg bewijs toe</>}
+                    {editingEvidenceId ? <><Edit2 className="w-4 h-4" /> {t("Update bewijs")}</> : <><Plus className="w-4 h-4" /> {t("Voeg bewijs toe")}</>}
                   </button>
                   {editingEvidenceId && (
                     <button onClick={cancelEdit} className="px-4 py-2.5 rounded-xl text-sm font-bold bg-gray-200 hover:bg-gray-300 transition-colors">
-                      Annuleer
+                      {t("Annuleer")}
                     </button>
                   )}
                 </div>
+              </div>
+            ) : (
+              <div className="p-12 flex flex-col items-center justify-center text-center opacity-50 min-h-[420px]">
+                <p className="text-lg font-bold">{t("Geen onderdeel geselecteerd")}</p>
+                <p className="text-sm">{t("Selecteer een onderdeel om bewijs te ontwerpen.")}</p>
               </div>
             )}
           </div>
@@ -1080,20 +1111,20 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
         <div className="lg:col-span-1">
           <div className="glass-panel p-4 bg-white/40 sticky top-6 border border-white/60">
             <h5 className="font-bold text-[13px] mb-3 border-b border-black/10 pb-2 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-[var(--color-accent)]" /> Totaaloverzicht LUK {loId}
+              <CheckCircle className="w-4 h-4 text-[var(--color-accent)]" /> {t("Totaaloverzicht LUK")} {loId}
             </h5>
             
             <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-1 scrollbar-hide">
-              {parts.every(p => p.evidence.length === 0) ? (
+              {parts.length === 0 || parts.every(p => (p.evidence || []).length === 0) ? (
                 <div className="opacity-50 italic text-[11px] bg-black/5 p-3 rounded-lg text-center">Nog nergens bewijs gekoppeld.</div>
               ) : (
                 parts.map((p, pIndex) => {
-                  if (p.evidence.length === 0) return null;
+                  if ((p.evidence || []).length === 0) return null;
                   return (
                     <div key={p.id} className="mb-4 last:mb-0">
-                      <div className="text-[10px] uppercase font-bold text-gray-500 mb-1.5 pl-1">Onderdeel {pIndex + 1}</div>
+                      <div className="text-[10px] uppercase font-bold text-gray-500 mb-1.5 pl-1">{t("Onderdeel")} {pIndex + 1}</div>
                       <div className="space-y-2">
-                        {p.evidence.map(ev => {
+                        {(p.evidence || []).map(ev => {
                           const typeInfo = THE_4_PS.find(t => t.id === ev.type);
                           const Icon = typeInfo?.icon || FileText;
                           return (
@@ -1107,8 +1138,8 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
                                   <Icon className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="min-w-0">
-                                  <div className="font-bold text-[11px] leading-tight break-words">{ev.name}</div>
-                                  {ev.stakeholders && <div className="text-[10px] opacity-80 mt-1 break-words">👥 {ev.stakeholders}</div>}
+                                  <div className="font-bold text-[11px] leading-tight break-words">{t(ev.name)}</div>
+                                  {ev.stakeholders && <div className="text-[10px] opacity-80 mt-1 break-words">👥 {ev.stakeholders.split(',').map(s => t(s.trim())).join(', ')}</div>}
                                 </div>
                               </div>
                               <button 
@@ -1177,6 +1208,7 @@ function Step2Proxies({ loId, parts, setParts, onNext, onBack, portfolio, target
 }
 
 function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO, onRestart }: { key?: string, portfolio: Record<string, LOPart[]>, learningOutcomes: {id: string, text: string}[], evlName: string, onBack: () => void, onEditLO: (id: string, partId?: string) => void, onRestart: () => void }) {
+  const { t } = useTranslation();
   const [expandedLOs, setExpandedLOs] = useState<string[]>([]);
   const [showCoverageModal, setShowCoverageModal] = useState(false);
   const [showStakeholdersModal, setShowStakeholdersModal] = useState(false);
@@ -1393,7 +1425,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
       </div>
 
       <div className="page-break-after w-full">
-        <h3 className="text-2xl font-bold mb-6"><span className="text-[var(--color-accent)]">4P</span> Analyse</h3>
+        <h3 className="text-2xl font-bold mb-6"><span className="text-[var(--color-accent)]">4P</span> {t("Analyse", "Analysis")}</h3>
         <div className="flex flex-col gap-6 mb-6 w-full">
           <div className="print-panel p-4 flex flex-row gap-4 items-center w-full">
             <div className="text-center shrink-0 w-32 border-r border-black/10 pr-4">
@@ -1420,28 +1452,28 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
             {Object.keys(stakeholderUsage).length > 0 ? (
               <div className="text-[11px] flex-1 pl-2">
                 <ul className="list-disc pl-3 grid grid-cols-3 gap-x-4">
-                  {Object.keys(stakeholderUsage).map(sh => <li key={sh} className="mb-0.5">{sh}</li>)}
+                  {Object.keys(stakeholderUsage).map(sh => <li key={sh} className="mb-0.5">{t(sh)}</li>)}
                 </ul>
               </div>
             ) : (
-              <div className="text-sm opacity-60 italic flex-1 pl-2">Geen stakeholders ingevoerd.</div>
+              <div className="text-sm opacity-60 italic flex-1 pl-2">{t("Geen stakeholders ingevoerd.", "No stakeholders entered.")}</div>
             )}
           </div>
           
           <div className="print-panel p-4 w-full flex flex-col items-center justify-center">
-            <h4 className="text-sm font-bold text-center mb-4 text-gray-500 uppercase tracking-wider">Spreiding van type bewijsmateriaal</h4>
+            <h4 className="text-sm font-bold text-center mb-4 text-gray-500 uppercase tracking-wider">{t("Spreiding van type bewijsmateriaal", "Distribution of evidence types")}</h4>
             <RadarChart width={500} height={400} cx="50%" cy="50%" outerRadius="75%" data={radarData}>
               <PolarGrid opacity={0.3} />
               <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--color-accent)', fontSize: 12, fontWeight: 'bold' }} />
               <PolarRadiusAxis angle={30} domain={[0, Math.max(1, radarData.reduce((max, d) => Math.max(max, d.A), 0))]} tick={false} axisLine={false} />
-              <Radar name="Aantal bewijzen" dataKey="A" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.4} />
+              <Radar name={t("Aantal bewijzen", "Evidence count")} dataKey="A" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.4} />
             </RadarChart>
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="text-2xl font-bold mb-6 page-break-before">Analyse per leeruitkomst</h3>
+        <h3 className="text-2xl font-bold mb-6 page-break-before">{t("Analyse per leeruitkomst", "Analysis per learning outcome")}</h3>
         {activeLOs.map(lo => {
           const parts = portfolio[lo.id];
           const loEvidence = parts.flatMap(p => p.evidence);
@@ -1454,7 +1486,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
           return (
             <div key={lo.id} className="print-panel p-6 mb-6 print-avoid-break">
               <div className="flex justify-between items-start mb-4 gap-4 border-b pb-4">
-                <div className="text-sm font-bold flex-1">{lo.id} - {lo.text}</div>
+                <div className="text-sm font-bold flex-1">{lo.id} - {t(lo.text)}</div>
                 {partsWithoutEvidenceCount > 0 && (
                   <div className="text-xs font-bold text-red-600 border border-red-600 px-2 py-1 rounded w-fit shrink-0">
                     Let op: niet alle LUK-onderdelen zijn van bewijs voorzien!
@@ -1517,7 +1549,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                       {part.evidence.length > 0 && (
                         <ul className="list-circle pl-4 mt-1 text-gray-700">
                           {part.evidence.map(e => (
-                            <li key={e.id}>{e.name} ({THE_4_PS.find(p=>p.id===e.type)?.label})</li>
+                            <li key={e.id}>{t(e.name)} ({THE_4_PS.find(p=>p.id===e.type)?.label})</li>
                           ))}
                         </ul>
                       )}
@@ -1540,16 +1572,16 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
     >
       <div className="flex items-center justify-between mb-6">
         <button onClick={onBack} className="text-sm font-bold opacity-60 hover:opacity-100 flex items-center gap-1">
-          <ArrowLeft className="w-4 h-4" /> Terug naar overzicht
+          <ArrowLeft className="w-4 h-4" /> {t("Terug naar overzicht")}
         </button>
         <button onClick={handleExportPDF} className="btn-primary flex items-center gap-2 text-sm !py-2 !px-4 hover:shadow-lg">
-          <FileText className="w-4 h-4" /> Exporteer naar PDF
+          <FileText className="w-4 h-4" /> {t("Exporteer naar PDF")}
         </button>
       </div>
 
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold mb-2"><span className="text-[var(--color-accent)]">4P</span> Analyse</h2>
-        <p className="opacity-80 max-w-2xl mx-auto text-lg">Toont het portfolio de LUKs (in samenhang) overtuigend aan?</p>
+        <h2 className="text-3xl font-bold mb-2"><span className="text-[var(--color-accent)]">4P</span> {t("Analyse", "Analysis")}</h2>
+        <p className="opacity-80 max-w-2xl mx-auto text-lg">{t("Toont het portfolio de LUKs (in samenhang) overtuigend aan?", "Does the portfolio convincingly demonstrate the LOUs?")}</p>
       </div>
 
       <div className="glass-panel p-6 mb-12">
@@ -1561,7 +1593,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
             >
               <PieChart className="w-8 h-8 text-[var(--color-accent)] mb-2" />
               <div className="text-3xl font-bold mb-1">{coveragePercent}%</div>
-              <div className="text-sm opacity-80">Dekking LUK-onderdelen<br/>({partsWithEvidence.length} van {partsWithLoInfo.length} voorzien van bewijs)</div>
+              <div className="text-sm opacity-80">{t("Dekking LUK-onderdelen")}<br/>({partsWithEvidence.length} {t("van", "of")} {partsWithLoInfo.length} {t("voorzien van bewijs", "supported by evidence")})</div>
             </div>
 
             <div 
@@ -1570,7 +1602,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
             >
               <Users className="w-8 h-8 text-[var(--color-accent)] mb-2" />
               <div className="text-3xl font-bold mb-1">{uniqueStakeholders}</div>
-              <div className="text-sm opacity-80">Unieke stakeholders<br/>betrokken bij bewijs</div>
+              <div className="text-sm opacity-80" dangerouslySetInnerHTML={{ __html: t("Unieke stakeholders betrokken bij bewijs") }}></div>
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-black/5 flex flex-col justify-center items-center shadow-sm">
@@ -1579,7 +1611,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                   <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
                     <PolarGrid stroke="#e2e8f0" />
                     <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 12, fontWeight: 'bold' }} />
-                    <Radar name="Proxies" dataKey="A" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.4} />
+                    <Radar name={t("Proxies", "Proxies")} dataKey="A" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.4} />
                     <Tooltip content={<CustomTooltip />} />
                   </RadarChart>
                 </ResponsiveContainer>
@@ -1588,7 +1620,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
           </div>
 
           <div className="lg:col-span-2">
-            <h3 className="text-xl font-bold mb-4">Analyse per Leeruitkomst</h3>
+            <h3 className="text-xl font-bold mb-4">{t("Analyse per Leeruitkomst", "Analysis per learning outcome")}</h3>
             {activeLOs.length === 0 ? (
               <div className="text-center p-10 bg-white rounded-xl border border-black/5 opacity-60 italic">
                 Er zijn nog geen bewijsstukken toegevoegd aan het portfolio.
@@ -1606,12 +1638,12 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                   const partsWithoutEvidenceCount = parts.filter(p => p.evidence.length === 0).length;
                   
                   const renderHighlightedLO = () => {
-                    if (parts.length === 0) return lo.text;
-                    let elements: React.ReactNode[] = [lo.text];
+                    if (parts.length === 0) return <>{t(lo.text)}</>;
+                    let elements: React.ReactNode[] = [t(lo.text)];
                     parts.forEach((part) => {
                       elements = elements.flatMap((el, index) => {
                         if (typeof el !== 'string') return el;
-                        const pieces = el.split(part.text);
+                        const pieces = el.split(t(part.text));
                         if (pieces.length === 1) return el;
                         const newElements: React.ReactNode[] = [];
                         pieces.forEach((piece, i) => {
@@ -1625,7 +1657,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                                 className={`font-medium ${textColorClass} ${!hasEvidence ? 'text-red-600 font-bold underline cursor-pointer hover:bg-red-50' : ''}`}
                                 onClick={!hasEvidence ? (e) => { e.stopPropagation(); onEditLO(lo.id, part.id); } : undefined}
                               >
-                                {part.text}
+                                {t(part.text)}
                               </span>
                             );
                           }
@@ -1633,7 +1665,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                         return newElements;
                       });
                     });
-                    return elements;
+                    return <>{elements.map((el, i) => <span key={i}>{el}</span>)}</>;
                   };
 
                   return (
@@ -1675,7 +1707,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                                 {partsWithoutEvidenceCount > 0 && (
                                   <div className="mt-3 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2 rounded-lg text-sm flex items-start gap-2">
                                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
-                                    <span>Let op: niet alle LUK-onderdelen zijn van bewijs voorzien!</span>
+                                    <span>{t("Let op: niet alle LUK-onderdelen zijn van bewijs voorzien!")}</span>
                                   </div>
                                 )}
                                 <div className="w-full flex justify-end mt-2">
@@ -1683,7 +1715,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                                     onClick={() => onEditLO(lo.id)}
                                     className="text-xs font-bold text-[var(--color-accent)] hover:underline flex items-center gap-1"
                                   >
-                                    Bewerk deze Leeruitkomst <ChevronRight className="w-3 h-3 inline" />
+                                    {t("Bewerk deze Leeruitkomst")} <ChevronRight className="w-3 h-3 inline" />
                                   </button>
                                 </div>
                               </div>
@@ -1748,7 +1780,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                                         const typeInfo = THE_4_PS.find(p=>p.id===e.type);
                                         return (
                                           <li key={e.id} className="flex flex-col border border-black/5 p-3 rounded-lg bg-white shadow-sm">
-                                            <span className="font-bold">{e.name}</span>
+                                            <span className="font-bold">{t(e.name)}</span>
                                             <span className="text-xs opacity-70">({typeInfo?.label})</span>
                                           </li>
                                         )
@@ -1787,7 +1819,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
 
       <div className="flex justify-center mt-8 pb-10">
         <button onClick={onBack} className="btn-primary">
-          Terug naar EvL-overzicht
+          {t("Terug naar EvL-overzicht")}
         </button>
       </div>
 
@@ -1810,7 +1842,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               <button onClick={() => setShowCoverageModal(false)} className="absolute top-4 right-4 p-2 hover:bg-black/5 rounded-full transition-colors">
                 <X className="w-5 h-5" />
               </button>
-              <h3 className="text-xl font-bold mb-4">Ongedekte LUK-onderdelen</h3>
+              <h3 className="text-xl font-bold mb-4">{t("Ongedekte LUK-onderdelen")}</h3>
               {uncoveredParts.length > 0 ? (
                 <ul className="space-y-4">
                   {uncoveredParts.map((p, idx) => (
@@ -1822,7 +1854,7 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
                 </ul>
               ) : (
                 <p className="text-sm opacity-80 text-green-700 font-bold bg-green-50 p-4 rounded-lg border border-green-200">
-                  Alle LUK-onderdelen zijn succesvol van bewijs voorzien!
+                  {t("Alle LUK-onderdelen zijn succesvol van bewijs voorzien!")}
                 </p>
               )}
             </motion.div>
@@ -1847,20 +1879,20 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
               <button onClick={() => setShowStakeholdersModal(false)} className="absolute top-4 right-4 p-2 hover:bg-black/5 rounded-full transition-colors">
                 <X className="w-5 h-5" />
               </button>
-              <h3 className="text-xl font-bold mb-4">Stakeholder Betrokkenheid</h3>
+              <h3 className="text-xl font-bold mb-4">{t("Stakeholder Betrokkenheid", "Stakeholder Involvement")}</h3>
               {Object.keys(stakeholderUsage).length > 0 ? (
                 <ul className="space-y-3">
                   {Object.entries(stakeholderUsage).map(([sh, loIds]) => (
                     <li key={sh} className="text-sm p-3 bg-white border border-black/10 rounded-lg shadow-sm">
-                      <strong className="block mb-1 text-[var(--color-accent)]">{sh}</strong>
+                      <strong className="block mb-1 text-[var(--color-accent)]">{t(sh)}</strong>
                       <span className="opacity-80 text-xs text-black/70">
-                        Betrokken bij LUKs: {Array.from(loIds as Set<string>).join(', ')}
+                        {t("Betrokken bij LUKs:", "Involved in LOs:")} {Array.from(loIds as Set<string>).join(', ')}
                       </span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm opacity-80 italic">Er zijn nog geen stakeholders gekoppeld.</p>
+                <p className="text-sm opacity-80 italic">{t("Er zijn nog geen stakeholders gekoppeld.")}</p>
               )}
             </motion.div>
           </motion.div>

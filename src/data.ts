@@ -105,6 +105,61 @@ export const AFSTUDEERONDERZOEK_DEFAULT_PORTFOLIO: Record<string, any[]> = {
   ]
 };
 
+export const NEW_EVL_OUTCOMES = [
+  { id: '1.1', text: 'De student integreert ad-hoc vaardigheden uit minstens drie verschillende disciplines (bijv. techniek, logistiek en communicatie) om een onvoorzien, alledaags probleem van een klant binnen een gestelde deadline op te lossen.' },
+  { id: '1.2', text: 'De student evalueert een complexe, onbekende en potentieel onmogelijke hulpvraag buiten het eigen comfortgebied, en formuleert direct een operationeel actieplan waarmee de uitdaging met \'can-do\'-mentaliteit wordt aangegaan.' },
+  { id: '1.3', text: 'De student organiseert een feilloos, analoog en digitaal bereikbaarheidsnetwerk, waardoor de student binnen de afzetmarkt (de lokale/globale community) vindbaar is en binnen de kritieke responstijd adequaat kan reageren op een oproep.' },
+  { id: '1.4', text: 'De student regisseert het eigen leer- en werkproces in een niet-gecertificeerde praktijkomgeving, waarbij de student op basis van acute maatschappelijke/lokale behoeften zelfstandig zijn of haar nut bewijst en legitimeert zonder externe kaders.' }
+];
+
+export const NEW_EVL_DEFAULT_PORTFOLIO: Record<string, any[]> = {
+  '1.1': [
+    { id: '1.1-part-0', text: 'integreert ad-hoc vaardigheden uit minstens drie verschillende disciplines', evidence: [{ id: '1.1-ev-1', name: 'Multidisciplinair opleverrapport', type: 'product', stakeholders: 'Docenten, Werkveldpartners' }], colorClass: 'bg-blue-200 text-blue-900' },
+    { id: '1.1-part-1', text: 'onvoorzien, alledaags probleem van een klant', evidence: [{ id: '1.1-ev-2', name: 'Werkend prototype', type: 'product', stakeholders: 'Opdrachtgevers, Werkveldpartners' }], colorClass: 'bg-emerald-200 text-emerald-900' },
+    { id: '1.1-part-2', text: 'binnen een gestelde deadline op te lossen', evidence: [{ id: '1.1-ev-3', name: 'Gevalideerd logboek', type: 'process', stakeholders: 'Opdrachtgevers, Peers' }], colorClass: 'bg-purple-200 text-purple-900' }
+  ],
+  '1.2': [
+    { id: '1.2-part-0', text: 'evalueert een complexe, onbekende en potentieel onmogelijke hulpvraag buiten het eigen comfortgebied', evidence: [{ id: '1.2-ev-1', name: 'Analyserapport & Haalbaarheidsstudie', type: 'product', stakeholders: 'Methodologisch experts, Docenten' }], colorClass: 'bg-amber-200 text-amber-900' },
+    { id: '1.2-part-1', text: 'formuleert direct een operationeel actieplan', evidence: [{ id: '1.2-ev-2', name: 'Operationeel Plan van Aanpak', type: 'product', stakeholders: 'Opdrachtgevers, Docenten' }], colorClass: 'bg-rose-200 text-rose-900' },
+    { id: '1.2-part-2', text: 'de uitdaging met \'can-do\'-mentaliteit wordt aangegaan', evidence: [{ id: '1.2-ev-3', name: 'Risico- en Kansenmatrix', type: 'product', stakeholders: 'Peers, Werkveldpartners' }], colorClass: 'bg-sky-200 text-sky-900' }
+  ],
+  '1.3': [
+    { id: '1.3-part-0', text: 'organiseert een feilloos, analoog en digitaal bereikbaarheidsnetwerk', evidence: [{ id: '1.3-ev-1', name: 'Communicatie-infrastructuur', type: 'product', stakeholders: 'Methodologisch experts, Peers' }], colorClass: 'bg-fuchsia-200 text-fuchsia-900' },
+    { id: '1.3-part-1', text: 'binnen de afzetmarkt (de lokale/globale community) vindbaar is', evidence: [{ id: '1.3-ev-2', name: 'Marketing- en vindbaarheidsverslag', type: 'product', stakeholders: 'Werkveldpartners, Docenten' }], colorClass: 'bg-teal-200 text-teal-900' },
+    { id: '1.3-part-2', text: 'binnen de kritieke responstijd adequaat kan reageren op een oproep', evidence: [{ id: '1.3-ev-3', name: 'SLA-Rapportage', type: 'product', stakeholders: 'Opdrachtgevers, Docenten' }], colorClass: 'bg-orange-200 text-orange-900' }
+  ],
+  '1.4': [
+    { id: '1.4-part-0', text: 'regisseert het eigen leer- en werkproces in een niet-gecertificeerde praktijkomgeving', evidence: [{ id: '1.4-ev-1', name: 'Demonstratie onder toezicht', type: 'performance', stakeholders: 'Docenten, Peers' }], colorClass: 'bg-lime-200 text-lime-900' },
+    { id: '1.4-part-1', text: 'op basis van acute maatschappelijke/lokale behoeften zelfstandig zijn of haar nut bewijst en legitimeert zonder externe kaders', evidence: [{ id: '1.4-ev-2', name: 'Maatschappelijk Impactverslag (inclusief getuigenissen van de community)', type: 'product', stakeholders: 'Opdrachtgevers, Werkveldpartners' }], colorClass: 'bg-cyan-200 text-cyan-900' }
+  ]
+};
+
+export const EVL4_OUTCOMES = [
+  { id: '4.1', text: 'De student theoretiseert en implementeert ter plekke een innovatieve noodoplossing voor een acute crisis waarvan de oorzaak, de context en de benodigde middelen vooraf volledig onbekend zijn.' },
+  { id: '4.2', text: 'De student regisseert en onderhoudt een organisch, informeel netwerk van specialisten en wederdiensten, waarmee capaciteit en schaarse middelen binnen de globale afzetmarkt direct kunnen worden gemobiliseerd zonder tussenkomst van geld of contracten.' },
+  { id: '4.3', text: 'De student analyseert de leef- of werkomgeving van een vaste klant en signaleert/verhelpt latente, onuitgesproken problemen nog voordat de klant zelf doorheeft dat er iets mis dreigt te gaan.' },
+  { id: '4.4', text: 'De student evalueert de eigen reputatie, ethische grenzen en operationele belasting in de praktijk, en ontwerpt een persoonlijk businessmodel dat louter draait op mond-tot-mondreclame en organische autonomie, zonder ooit traditionele marketing of certificeringen te gebruiken.' }
+];
+
+export const EVL4_DEFAULT_PORTFOLIO: Record<string, any[]> = {
+  '4.1': [
+    { id: '4.1-part-0', text: 'theoretiseert en implementeert ter plekke een innovatieve noodoplossing', evidence: [{ id: '4.1-ev-1', name: 'Live improvisatie-test', type: 'performance', stakeholders: 'Docenten, Werkveldpartners' }], colorClass: 'bg-blue-200 text-blue-900' },
+    { id: '4.1-part-1', text: 'voor een acute crisis waarvan de oorzaak, de context en de benodigde middelen vooraf volledig onbekend zijn', evidence: [{ id: '4.1-ev-2', name: 'Logboek crisis-aanpak incl. logica', type: 'process', stakeholders: 'Methodologisch experts, Opdrachtgevers' }], colorClass: 'bg-emerald-200 text-emerald-900' }
+  ],
+  '4.2': [
+    { id: '4.2-part-0', text: 'regisseert en onderhoudt een organisch, informeel netwerk van specialisten en wederdiensten', evidence: [{ id: '4.2-ev-1', name: 'Netwerk-interactielog', type: 'practice', stakeholders: 'Peers, Werkveldpartners' }], colorClass: 'bg-amber-200 text-amber-900' },
+    { id: '4.2-part-1', text: 'waarmee capaciteit en schaarse middelen binnen de globale afzetmarkt direct kunnen worden gemobiliseerd zonder tussenkomst van geld of contracten', evidence: [{ id: '4.2-ev-2', name: 'Netwerkanalyse & Social Capital Rapport', type: 'product', stakeholders: 'Docenten, Methodologisch experts' }], colorClass: 'bg-rose-200 text-rose-900' }
+  ],
+  '4.3': [
+    { id: '4.3-part-0', text: 'analyseert de leef- of werkomgeving van een vaste klant en signaleert/verhelpt latente, onuitgesproken problemen', evidence: [{ id: '4.3-ev-1', name: 'Proactieve Systeemanalyse & Risicorapport', type: 'product', stakeholders: 'Opdrachtgevers, Methodologisch experts' }], colorClass: 'bg-fuchsia-200 text-fuchsia-900' },
+    { id: '4.3-part-1', text: 'verhelpt latente, onuitgesproken problemen nog voordat de klant zelf doorheeft dat er iets mis dreigt te gaan', evidence: [{ id: '4.3-ev-2', name: 'Observatieverslag (preventief praktijkhandelen)', type: 'practice', stakeholders: 'Opdrachtgevers, Werkveldpartners' }], colorClass: 'bg-teal-200 text-teal-900' }
+  ],
+  '4.4': [
+    { id: '4.4-part-0', text: 'evalueert de eigen reputatie, ethische grenzen en operationele belasting in de praktijk', evidence: [{ id: '4.4-ev-1', name: 'Reflectieverslag & Ethisch Kompas', type: 'process', stakeholders: 'Docenten, Peers' }], colorClass: 'bg-lime-200 text-lime-900' },
+    { id: '4.4-part-1', text: 'ontwerpt een persoonlijk businessmodel dat louter draait op mond-tot-mondreclame en organische autonomie', evidence: [{ id: '4.4-ev-2', name: 'Autonoom Business Model Canvas', type: 'product', stakeholders: 'Werkveldpartners, Docenten' }], colorClass: 'bg-cyan-200 text-cyan-900' }
+  ]
+};
+
 export const TRIANGLE_THEORY = {
   saturatie: {
     title: "Saturatie",
