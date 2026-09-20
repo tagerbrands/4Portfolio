@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: #623165;
+  --color-text-main: #2c3e50;
+  --color-success: #27ae60;
+  --color-warning: #f39c12;
+  --color-glass: rgba(255, 255, 255, 0.65);
+  --color-glass-header: rgba(255, 255, 255, 0.4);
+  --color-glass-border: rgba(255, 255, 255, 0.5);
+  --color-glass-item: rgba(255, 255, 255, 0.8);
+}
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #f5eef6 0%, #e1d4e3 100%);
+  color: var(--color-text-main);
+  min-height: 100vh;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 font-bold text-white bg-[var(--color-accent)] rounded-[12px] transition-transform hover:scale-105 active:scale-95 border-none cursor-pointer shadow-sm;
+  }
+  .glass-panel {
+    @apply bg-[var(--color-glass)] backdrop-blur-[20px] border border-[var(--color-glass-border)] rounded-[20px];
+  }
+  .glass-header {
+    @apply bg-[var(--color-glass-header)] backdrop-blur-[10px] border-b border-[var(--color-glass-border)];
+  }
+  .glass-item {
+    @apply bg-[var(--color-glass-item)] border border-black/5 rounded-[8px];
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+  body {
+    background: none !important;
+    color: #000 !important;
+    min-height: auto;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .page-break-before {
+    page-break-before: always;
+  }
+  .page-break-after {
+    page-break-after: always;
+  }
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .print-panel {
+    border: 1px solid #ddd !important;
+    background: #fff !important;
+    break-inside: avoid;
+  }
+  .print-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .print-col {
+    flex: 1;
+    min-width: 0;
+  }
+}
