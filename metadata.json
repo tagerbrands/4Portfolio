@@ -1,6 +1,6 @@
 {
   "name": "4Portfolio",
-  "description": "",
+  "description": "Interactieve applicatie voor het ontwerpen, opsplitsen en analyseren van portfolio-leeruitkomsten (LUK) en bewijsmaterialen volgens het 4P-model.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

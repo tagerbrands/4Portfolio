@@ -400,7 +400,7 @@ function Theory({ onNext }: { key?: string, onNext: () => void }) {
 
         <div className="text-center text-sm opacity-60">
           <p>{t("Auteur:")} <a href="https://www.linkedin.com/in/tim-gerbrands" target="_blank" rel="noopener noreferrer" className="hover:underline text-[var(--color-accent)] font-bold">Tim A. Gerbrands</a></p>
-          <p>{t("Laatst bijgewerkt:")} {t("23 juni 2026", "June 23, 2026")}</p>
+          <p>{t("Laatst bijgewerkt:")} {t("20 september 2026", "September 20, 2026")}</p>
         </div>
       </div>
     </motion.div>
