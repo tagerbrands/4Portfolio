@@ -334,19 +334,19 @@ export const TRIANGLE_THEORY = {
 export const MISALIGNMENT_THEORY = [
   {
     title: "Mismatching",
-    desc: "Het gebruik van een verkeerde proxy voor de leeruitkomst. Bijvoorbeeld een kennistoets inzetten om een praktische vaardigheid te meten."
+    desc: "Inzet van de verkeerde proxy in het licht van de leeruitkomst (zoals een kennistoets om praktische vaardigheid te meten)."
   },
   {
     title: "Mismanagement",
-    desc: "Slechte administratie of een gebrekkig ontwerp van de toetsing, waardoor de proxy niet goed tot zijn recht komt of verkeerd wordt afgenomen."
+    desc: "Een geschikte proxy komt niet tot zijn recht doordat onderliggende beoordelingscriteria onvoldoende aansluiten bij de leeruitkomst."
   },
   {
     title: "Misinterpreting",
-    desc: "Beoordelaars trekken onjuiste conclusies uit de proxy, bijvoorbeeld door een gebrek aan expertise of onduidelijke beoordelingscriteria."
+    desc: "Het trekken van onjuiste conclusies uit een proxy, bijvoorbeeld door een gebrek aan expertise of onduidelijke beoordelingscriteria."
   },
   {
     title: "Slippage",
-    desc: "Verlies van belangrijke informatie wanneer een complexe prestatie wordt gereduceerd tot een proxy. Essentiële nuances gaan hierbij verloren."
+    desc: "Het beoordelen van de ene proxy alsof het een andere betreft, zoals procesbeoordelingen via eindproducten of extrapolatie van prestaties in gesimuleerde omstandigheden naar praktijksituaties."
   },
   {
     title: "Spillage",
@@ -354,6 +354,6 @@ export const MISALIGNMENT_THEORY = [
   },
   {
     title: "Over-saturation",
-    desc: "Het verzamelen van te veel proxies, wat leidt tot ruis, inefficiëntie en een onoverzichtelijk beeld voor de beoordelaars."
+    desc: "Eén proxy is zodanig dominant dat deze onterecht gelijk gesteld wordt aan competentie-ontwikkeling, wat impliceert dat deze bewijsvorm bepalend is voor studiesucces."
   }
 ];

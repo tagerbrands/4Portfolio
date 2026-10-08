@@ -1735,12 +1735,12 @@ function TotalPortfolio({ portfolio, learningOutcomes, evlName, onBack, onEditLO
         </div>
 
         <div className="bg-red-50/50 p-4 rounded-xl border border-red-100 shadow-sm">
-          <h4 className="font-bold text-sm text-red-800 border-b border-red-200 pb-2 mb-3 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 flex-shrink-0" /> Misalignment: valkuilen bij beoordelen en beslissen</h4>
+          <h4 className="font-bold text-sm text-red-800 border-b border-red-200 pb-2 mb-3 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 flex-shrink-0" /> {t("Misalignment: valkuilen bij beoordelen en beslissen")}</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
             {MISALIGNMENT_THEORY.map(m => (
               <div key={m.title} className="flex flex-col gap-1">
-                <strong className="text-xs text-red-900">{m.title}</strong>
-                <p className="text-[11px] text-red-900/80 leading-snug">{m.desc}</p>
+                <strong className="text-xs text-red-900">{t(m.title)}</strong>
+                <p className="text-[11px] text-red-900/80 leading-snug">{t(m.desc)}</p>
               </div>
             ))}
           </div>
